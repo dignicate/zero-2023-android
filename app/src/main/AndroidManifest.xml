@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Zero2023android"
-        tools:targetApi="31">
+        tools:targetApi="33"
+        >
         <activity
             android:name=".MainActivity"
             android:exported="true"
