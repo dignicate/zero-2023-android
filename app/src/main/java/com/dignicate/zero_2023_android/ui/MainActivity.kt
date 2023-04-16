@@ -64,28 +64,28 @@ private fun MainScreen(
 ) {
     val navController = rememberNavController()
     LaunchedEffect(destination) {
-        if (navController.currentDestination?.route != destination.route) {
-            navController.navigate(destination.routeWithArgs)
+        if (navController.currentDestination?.route != destination.router.path) {
+            navController.navigate(destination.router.absolutePath)
         }
     }
     Box(
         modifier = modifier,
     ) {
-        NavHost(navController, startDestination = ComposeScreen.Unknown.routeWithArgs) {
+        NavHost(navController, startDestination = ComposeScreen.Unknown.router.absolutePath) {
             composable(
-                route = ComposeScreen.Main.BookList.ROUTE_WITH_ARGS,
+                route = ComposeScreen.Main.BookList.ROUTER.absolutePath,
             ) {
                 // TODO:
             }
             composable(
-                route = ComposeScreen.Main.BookDetail.ROUTE_WITH_ARGS,
-                arguments = listOf(navArgument("id") { type = NavType.LongType })
+                route = ComposeScreen.Main.BookDetail.ROUTER.absolutePath,
+                arguments = listOf(navArgument(ComposeScreen.Main.BookDetail.ROUTER.argumentKeys[0]) { type = NavType.LongType })
             ) {
-                val bookId = it.arguments!!.getLong("id")
+                val bookId = it.arguments!!.getLong(ComposeScreen.Main.BookDetail.ROUTER.argumentKeys[0])
                 // TODO:
             }
             composable(
-                route = ComposeScreen.Unknown.route,
+                route = ComposeScreen.Unknown.router.absolutePath,
             ) {
                 // Empty
             }
