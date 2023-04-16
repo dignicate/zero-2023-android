@@ -8,37 +8,39 @@ import kotlinx.coroutines.flow.asStateFlow
  * https://tabris.com/how-to-trigger-navigation-in-jetpack-compose-outside-of-composables/
  */
 interface NavigationDestination {
-    val route: String
-    val routeWithArgs: String
+    val router: ComposeScreen.Router
 }
 
-sealed class ComposeScreen(override val route: String) : NavigationDestination {
+sealed class ComposeScreen(override val router: Router) : NavigationDestination {
 
     object Main {
-        class BookList : ComposeScreen(ROUTE) {
-            override val routeWithArgs: String
-                get() = route
-
+        class BookList : ComposeScreen(ROUTER) {
             companion object {
-                const val ROUTE = "book/list"
-                const val ROUTE_WITH_ARGS = ROUTE
+                val ROUTER = Router("book/list")
             }
         }
 
-        class BookDetail(val bookId: Long) : ComposeScreen(ROUTE) {
-            override val routeWithArgs: String
-                get() = "$route/$bookId"
-
+        class BookDetail(val bookId: Long) : ComposeScreen(ROUTER) {
             companion object {
-                const val ROUTE = "book/detail"
-                const val ROUTE_WITH_ARGS = "$ROUTE/{id}"
+                val ROUTER = Router("book/detail", "book_id")
             }
         }
     }
 
-    object Unknown : ComposeScreen("unknown") {
-        override val routeWithArgs: String
-            get() = route
+    object Unknown : ComposeScreen(Router("unknown"))
+
+    class Router(
+        val path: String,
+        vararg val argumentKeys: String,
+    ) {
+        val absolutePath: String
+            get() {
+                val stringBuilder = StringBuilder(path)
+                argumentKeys.forEach {
+                    stringBuilder.append("/{$it}")
+                }
+                return stringBuilder.toString()
+            }
     }
 }
 
