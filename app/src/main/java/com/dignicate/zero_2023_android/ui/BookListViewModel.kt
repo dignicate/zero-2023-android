@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,6 +26,11 @@ class BookListViewModel @Inject constructor(
     fun onCreate() {
         viewModelScope.launch {
             setupCoroutine()
+        }
+    }
+
+    fun onResume() {
+        viewModelScope.launch {
             useCase.fetchBookList()
         }
     }
