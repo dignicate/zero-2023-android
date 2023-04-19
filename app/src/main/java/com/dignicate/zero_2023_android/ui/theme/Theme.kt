@@ -11,10 +11,18 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.structuralEqualityPolicy
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
+
+/**
+ * https://developer.android.com/jetpack/compose/designsystems/material3
+ */
 
 private val DarkColorScheme: ColorScheme = darkColorScheme(
     primary = Purple80,
@@ -66,4 +74,9 @@ fun Zero2023androidTheme(
         typography = Typography,
         content = content
     )
+}
+
+// FIXME: Need better way of extensions.
+object ColorSchemeExtension {
+    val ColorScheme.textMain by mutableStateOf(Color(0xFF11184B), structuralEqualityPolicy())
 }

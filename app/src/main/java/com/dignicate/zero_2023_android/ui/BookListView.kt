@@ -1,8 +1,10 @@
 package com.dignicate.zero_2023_android.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -24,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import com.dignicate.zero_2023_android.ui.theme.ColorSchemeExtension.textMain
+import com.dignicate.zero_2023_android.ui.theme.TypographyExtension.bodyTitle
 import com.dignicate.zero_2023_android.ui.theme.Zero2023androidTheme
 
 @Composable
@@ -63,6 +67,10 @@ private fun BookListView(
     LazyVerticalGrid(
         columns = GridCells.Adaptive(159.dp),
         state = state,
+        modifier = modifier
+            .padding(horizontal = 24.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         val items = data?.items ?: emptyList()
         items(items.size) { index ->
@@ -95,15 +103,20 @@ private fun BookListItemView(
         ) {
             Text(
                 text = item.title,
-                color = MaterialTheme.colorScheme.primary,
-                style=  MaterialTheme.typography.titleMedium,
-                modifier = modifier,
+                color = MaterialTheme.colorScheme.textMain,
+                style=  MaterialTheme.typography.bodyTitle,
+                modifier = modifier
+                    .height(36.dp),
+                maxLines = 2,
             )
+            Spacer(modifier = modifier.height(8.dp))
             Text(
                 text = item.author,
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.textMain,
                 style = MaterialTheme.typography.labelSmall,
-                modifier = modifier,
+                modifier = modifier
+                    .height(28.dp),
+                maxLines = 2,
             )
         }
     }
@@ -119,11 +132,11 @@ private fun BookListView_Preview() {
                 items = listOf(
                     BookListViewModel.Data.Item(
                         title = "Title 1",
-                        author = "",
+                        author = "Author 1",
                     ),
                     BookListViewModel.Data.Item(
                         title = "Title 2",
-                        author = "",
+                        author = "Author 2",
                     )
                 )
             )
