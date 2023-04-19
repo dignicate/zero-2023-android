@@ -10,4 +10,8 @@ class MainViewModel @Inject constructor(
     private val useCase: MainUseCase,
     val navigator: ComposeNavigator,
 ) : ViewModel() {
+
+    fun onResume() {
+        navigator.navigate(ComposeScreen.Main.BookList)
+    }
 }

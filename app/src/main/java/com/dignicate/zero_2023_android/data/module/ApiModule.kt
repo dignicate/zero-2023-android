@@ -1,15 +1,18 @@
 package com.dignicate.zero_2023_android.data.module
 
 import com.dignicate.zero_2023_android.data.service.api.ApiService
+import com.dignicate.zero_2023_android.data.service.api.MockInterceptor
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Named
 import javax.inject.Singleton
 
 /**
@@ -30,14 +33,21 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient =
+    fun provideOkHttpClient(
+        @Named("MockInterceptor") mockInterceptor: Interceptor,
+    ): OkHttpClient =
         OkHttpClient
             .Builder()
+            .addInterceptor(mockInterceptor)
             .build()
 
     @Provides
     @Singleton
-    fun provideRetrofit(baseUrl: String, gson: Gson, client: OkHttpClient): ApiService {
+    fun provideRetrofit(
+        baseUrl: String,
+        gson: Gson,
+        client: OkHttpClient
+    ): ApiService {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(client)
@@ -45,4 +55,9 @@ object ApiModule {
             .build()
             .create(ApiService::class.java)
     }
+
+    @Provides
+    @Singleton
+    @Named("MockInterceptor")
+    fun provideMockInterceptor(): Interceptor = MockInterceptor()
 }

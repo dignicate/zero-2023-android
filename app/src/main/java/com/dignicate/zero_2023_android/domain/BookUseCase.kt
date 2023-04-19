@@ -4,6 +4,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import timber.log.Timber
 import javax.inject.Inject
 
 interface BookUseCase {
@@ -25,6 +26,7 @@ class BookUseCaseImpl @Inject constructor(
             }
 
     override suspend fun fetchBookList() {
+        Timber.d("fetchBookList()")
         fetchBookListTrigger.emit(Unit)
     }
 }

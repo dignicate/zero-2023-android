@@ -14,10 +14,8 @@ interface NavigationDestination {
 sealed class ComposeScreen(override val router: Router) : NavigationDestination {
 
     object Main {
-        class BookList : ComposeScreen(ROUTER) {
-            companion object {
-                val ROUTER = Router("book/list")
-            }
+        object BookList : ComposeScreen(Router("book/list")) {
+            val ROUTER = router
         }
 
         class BookDetail(val bookId: Long) : ComposeScreen(ROUTER) {

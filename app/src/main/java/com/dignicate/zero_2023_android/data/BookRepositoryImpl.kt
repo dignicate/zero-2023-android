@@ -20,6 +20,7 @@ class BookRepositoryImpl @Inject constructor(
 ) : BookRepository {
 
     override fun fetchBookList(): Flow<BookInfo> {
+        Timber.d("fetchBookList()")
         return callbackFlow {
             val api = apiService.getBookList()
             api.enqueue(object: Callback<BookListDto> {
