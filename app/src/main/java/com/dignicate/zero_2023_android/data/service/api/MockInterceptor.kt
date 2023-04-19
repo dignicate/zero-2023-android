@@ -15,41 +15,30 @@ class MockInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val path = chain.request().url().toString()
         Timber.d("path: $path")
-        if (path.endsWith("dummy/book/list")) {
-            val mockResponse = """
-{
-    "books": [
-        {
-            "title": "The War of the Worlds",
-            "author": "H. G. Wells"
-        },
-        {
-            "title": "Dracula",
-            "author": "Bram Stoker"
-        },
-        {
-            "title": "Oliver Twist",
-            "author": "Charles Dickens"
-        },
-        {
-            "title": "Tess of the d'Urbervilles",
-            "author": "Thomas Hardy"
-        }
-    ]
-}
-            """.trimIndent()
-            return chain.proceed(chain.request())
-                .newBuilder()
-                .code(200)
-                .protocol(Protocol.HTTP_2)
-                .message(mockResponse)
-                .body(
-                    ResponseBody.create(MediaType.parse("application/json"),
-                    mockResponse.toByteArray()))
-                .addHeader("content-type", "application/json")
-                .build()
+        return if (path.endsWith("dummy/book/list")) {
+            proceedWithMockJson(chain, bookListMockResponse)
         } else {
-            return chain.proceed(chain.request())
+            chain.proceed(chain.request())
         }
     }
+
+    private fun proceedWithMockJson(chain: Interceptor.Chain, mockJson: String): Response {
+        return chain.proceed(chain.request())
+            .newBuilder()
+            .code(200)
+            .protocol(Protocol.HTTP_2)
+            .message(mockJson)
+            .body(
+                ResponseBody.create(
+                    MediaType.parse("application/json"),
+                    mockJson.toByteArray()
+                )
+            )
+            .addHeader("content-type", "application/json")
+            .build()
+    }
 }
+
+private const val bookListMockResponse = """
+{ "books": [ { "title": "The War of the Worlds", "author": "H. G. Wells" }, { "title": "Dracula", "author": "Bram Stoker" }, { "title": "Oliver Twist", "author": "Charles Dickens" }, { "title": "Tess of the d'Urbervilles", "author": "Thomas Hardy" } ] }
+"""
