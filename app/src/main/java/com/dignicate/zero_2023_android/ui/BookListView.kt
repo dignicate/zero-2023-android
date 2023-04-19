@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -60,7 +61,7 @@ private fun BookListView(
 ) {
     val state = rememberLazyGridState()
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(90.dp),
+        columns = GridCells.Adaptive(159.dp),
         state = state,
     ) {
         val items = data?.items ?: emptyList()
@@ -81,15 +82,16 @@ private fun BookListItemView(
 ) {
     Box(
         modifier
-            .width(90.dp)
-            .height(128.dp)
+            .width(159.dp)
+            .height(209.dp)
             .background(
                 color = MaterialTheme.colorScheme.background,
                 shape = RoundedCornerShape(6.dp)
             )
     ) {
         Column(
-            modifier = modifier,
+            modifier = modifier
+                .padding(horizontal = 24.dp, vertical = 24.dp),
         ) {
             Text(
                 text = item.title,
@@ -136,7 +138,7 @@ private fun BookListItemView_Preview() {
         BookListItemView(
             modifier = Modifier,
             item = BookListViewModel.Data.Item(
-                title = "Title",
+                title = "The War of the Words",
                 author = "Author",
             )
         )
