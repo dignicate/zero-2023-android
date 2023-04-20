@@ -64,21 +64,30 @@ private fun BookListView(
     data: BookListViewModel.Data?,
 ) {
     val state = rememberLazyGridState()
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(159.dp),
-        state = state,
-        modifier = modifier
-            .padding(horizontal = 24.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
+    Column(
+        modifier = modifier,
     ) {
-        val items = data?.items ?: emptyList()
-        items(items.size) { index ->
-            val item = items[index]
-            BookListItemView(
-                modifier = modifier,
-                item = item,
-            )
+        Text(
+            text = "Books",
+            modifier = modifier
+                .padding(start = 12.dp, top = 6.dp),
+        )
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(159.dp),
+            state = state,
+            modifier = modifier
+                .padding(horizontal = 24.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            val items = data?.items ?: emptyList()
+            items(items.size) { index ->
+                val item = items[index]
+                BookListItemView(
+                    modifier = modifier,
+                    item = item,
+                )
+            }
         }
     }
 }
