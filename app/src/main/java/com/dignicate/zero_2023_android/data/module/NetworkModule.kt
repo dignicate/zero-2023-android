@@ -1,5 +1,6 @@
 package com.dignicate.zero_2023_android.data.module
 
+import android.content.Context
 import com.dignicate.zero_2023_android.data.service.api.ApiService
 import com.dignicate.zero_2023_android.data.service.api.MockInterceptor
 import com.google.gson.Gson
@@ -21,7 +22,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 @Suppress("unused")
-object ApiModule {
+object NetworkModule {
 
     @Provides
     @Singleton
@@ -34,7 +35,8 @@ object ApiModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
-        @Named("MockInterceptor") mockInterceptor: Interceptor,
+        @Named("mockInterceptor")
+        mockInterceptor: Interceptor,
     ): OkHttpClient =
         OkHttpClient
             .Builder()
@@ -58,6 +60,6 @@ object ApiModule {
 
     @Provides
     @Singleton
-    @Named("MockInterceptor")
-    fun provideMockInterceptor(): Interceptor = MockInterceptor()
+    @Named("mockInterceptor")
+    fun provideMockInterceptor(context: Context): Interceptor = MockInterceptor(context)
 }
