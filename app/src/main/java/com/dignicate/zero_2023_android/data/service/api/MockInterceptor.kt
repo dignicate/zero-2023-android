@@ -2,7 +2,6 @@ package com.dignicate.zero_2023_android.data.service.api
 
 import android.content.Context
 import com.dignicate.zero_2023_android.R
-import dagger.Provides
 import okhttp3.Interceptor
 import okhttp3.MediaType
 import okhttp3.Protocol
@@ -10,7 +9,6 @@ import okhttp3.Response
 import okhttp3.ResponseBody
 import timber.log.Timber
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * https://wahibhaq.medium.com/an-easy-way-to-mock-an-api-response-using-retrofit-okhttp-and-interceptor-7968e1f0d050
