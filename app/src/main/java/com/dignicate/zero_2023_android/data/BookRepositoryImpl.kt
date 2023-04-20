@@ -2,7 +2,8 @@ package com.dignicate.zero_2023_android.data
 
 import com.dignicate.zero_2023_android.data.service.api.ApiService
 import com.dignicate.zero_2023_android.data.service.api.dto.BookListDto
-import com.dignicate.zero_2023_android.domain.BookInfo
+import com.dignicate.zero_2023_android.domain.Book
+import com.dignicate.zero_2023_android.domain.BookList
 import com.dignicate.zero_2023_android.domain.BookRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.onFailure
@@ -19,8 +20,7 @@ class BookRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
 ) : BookRepository {
 
-    override fun fetchBookList(): Flow<BookInfo> {
-        Timber.d("fetchBookList()")
+    override fun fetchBookList(): Flow<BookList> {
         return callbackFlow {
             val api = apiService.getBookList()
             api.enqueue(object: Callback<BookListDto> {
@@ -43,12 +43,17 @@ class BookRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override fun fetchBookDetail(): Flow<Book> {
+        TODO("Not yet implemented")
+    }
 }
 
-private fun BookListDto.toDomain(): BookInfo {
-    return BookInfo(
+private fun BookListDto.toDomain(): BookList {
+    return BookList(
         books = books.map {
-            BookInfo.Book(
+            Book(
+                id = Book.Id(it.id),
                 title = it.title,
                 author = it.author,
             )

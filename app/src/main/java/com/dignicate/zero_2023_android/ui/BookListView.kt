@@ -56,6 +56,9 @@ fun BookListView(
     BookListView(
         modifier = modifier,
         data = uiState.data,
+        onClick = {
+
+        }
     )
 }
 
@@ -63,6 +66,7 @@ fun BookListView(
 private fun BookListView(
     modifier: Modifier,
     data: BookListViewModel.Data?,
+    onClick: (BookListViewModel.Data.Item.Id) -> Unit,
 ) {
     val state = rememberLazyGridState()
     Column(
@@ -91,6 +95,7 @@ private fun BookListView(
                 BookListItemView(
                     modifier = modifier,
                     item = item,
+                    onClick = { id -> onClick.invoke(id) }
                 )
             }
         }
@@ -101,6 +106,7 @@ private fun BookListView(
 private fun BookListItemView(
     modifier: Modifier,
     item: BookListViewModel.Data.Item,
+    onClick: (BookListViewModel.Data.Item.Id) -> Unit,
 ) {
     Box(
         modifier
@@ -145,15 +151,18 @@ private fun BookListView_Preview() {
             data = BookListViewModel.Data(
                 items = listOf(
                     BookListViewModel.Data.Item(
+                        id = BookListViewModel.Data.Item.Id(1L),
                         title = "Title 1",
                         author = "Author 1",
                     ),
                     BookListViewModel.Data.Item(
+                        id = BookListViewModel.Data.Item.Id(2L),
                         title = "Title 2",
                         author = "Author 2",
                     )
                 )
-            )
+            ),
+            onClick = {},
         )
     }
 }
@@ -165,9 +174,11 @@ private fun BookListItemView_Preview() {
         BookListItemView(
             modifier = Modifier,
             item = BookListViewModel.Data.Item(
+                id = BookListViewModel.Data.Item.Id(1L),
                 title = "The War of the Words",
                 author = "Author",
-            )
+            ),
+            onClick = {},
         )
     }
 }

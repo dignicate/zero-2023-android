@@ -2,16 +2,14 @@ package com.dignicate.zero_2023_android.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dignicate.zero_2023_android.domain.BookInfo
+import com.dignicate.zero_2023_android.domain.Book
+import com.dignicate.zero_2023_android.domain.BookList
 import com.dignicate.zero_2023_android.domain.BookUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.processor.internal.definecomponent.codegen._dagger_hilt_android_internal_builders_ViewModelComponentBuilder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,6 +33,10 @@ class BookListViewModel @Inject constructor(
         }
     }
 
+    fun onBookClicked(id: Data.Item.Id) {
+
+    }
+
     private suspend fun setupCoroutine() {
         useCase.bookInfo
             .collect {
@@ -46,9 +48,12 @@ class BookListViewModel @Inject constructor(
         val items: List<Item>,
     ) {
         data class Item(
+            val id: Id,
             val title: String,
             val author: String,
-        )
+        ) {
+            data class Id(val value: Long)
+        }
     }
 
     sealed interface UiState {
@@ -66,13 +71,14 @@ class BookListViewModel @Inject constructor(
     }
 }
 
-private fun BookInfo.toViewData(): BookListViewModel.Data =
+private fun BookList.toViewData(): BookListViewModel.Data =
     BookListViewModel.Data(
         items = books.map { it.toViewData() }
     )
 
-private fun BookInfo.Book.toViewData(): BookListViewModel.Data.Item =
+private fun Book.toViewData(): BookListViewModel.Data.Item =
     BookListViewModel.Data.Item(
+        id = BookListViewModel.Data.Item.Id(id.value),
         title = title,
         author = author,
     )

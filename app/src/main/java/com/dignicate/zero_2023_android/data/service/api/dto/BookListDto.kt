@@ -7,6 +7,8 @@ data class BookListDto(
     val books: List<Book>,
 ) {
     data class Book(
+        @SerializedName("id")
+        val id: Long,
         @SerializedName("title")
         val title: String,
         @SerializedName("author")

@@ -4,12 +4,13 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import timber.log.Timber
 import javax.inject.Inject
 
 interface BookUseCase {
-    val bookInfo: Flow<BookInfo>
+    val bookInfo: Flow<BookList>
+    val book: Flow<Book>
     suspend fun fetchBookList()
+    suspend fun fetchBookDetail(id: Book.Id)
 }
 
 class BookUseCaseImpl @Inject constructor(
@@ -18,15 +19,27 @@ class BookUseCaseImpl @Inject constructor(
 
     private val fetchBookListTrigger = MutableSharedFlow<Unit>()
 
+    private val fetchBookDetailTrigger = MutableSharedFlow<Book.Id>()
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val bookInfo: Flow<BookInfo>
+    override val bookInfo: Flow<BookList>
         get() = fetchBookListTrigger
             .flatMapLatest {
                 repository.fetchBookList()
             }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val book: Flow<Book>
+        get() = fetchBookDetailTrigger
+            .flatMapLatest {
+                repository.fetchBookDetail()
+            }
+
     override suspend fun fetchBookList() {
-        Timber.d("fetchBookList()")
         fetchBookListTrigger.emit(Unit)
+    }
+
+    override suspend fun fetchBookDetail(id: Book.Id) {
+        TODO("Not yet implemented")
     }
 }
