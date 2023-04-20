@@ -34,6 +34,10 @@ class BookListViewModel @Inject constructor(
         }
     }
 
+    fun onBookClicked(id: Data.Item.Id) {
+
+    }
+
     private suspend fun setupCoroutine() {
         useCase.bookInfo
             .collect {
