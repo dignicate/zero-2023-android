@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import com.dignicate.zero_2023_android.ui.theme.ColorSchemeExtension.bookCell
 import com.dignicate.zero_2023_android.ui.theme.ColorSchemeExtension.textMain
 import com.dignicate.zero_2023_android.ui.theme.TypographyExtension.bodyTitle
 import com.dignicate.zero_2023_android.ui.theme.Zero2023androidTheme
@@ -65,12 +66,16 @@ private fun BookListView(
 ) {
     val state = rememberLazyGridState()
     Column(
-        modifier = modifier,
+        modifier = modifier
+            .background(
+                color = MaterialTheme.colorScheme.background,
+            ),
     ) {
         Text(
             text = "Books",
             modifier = modifier
                 .padding(start = 12.dp, top = 6.dp),
+            style = MaterialTheme.typography.titleLarge,
         )
         LazyVerticalGrid(
             columns = GridCells.Adaptive(159.dp),
@@ -102,7 +107,7 @@ private fun BookListItemView(
             .width(159.dp)
             .height(209.dp)
             .background(
-                color = MaterialTheme.colorScheme.background,
+                color = MaterialTheme.colorScheme.bookCell,
                 shape = RoundedCornerShape(6.dp)
             )
     ) {

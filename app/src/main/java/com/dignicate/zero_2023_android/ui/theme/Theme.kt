@@ -56,10 +56,10 @@ fun Zero2023androidTheme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
+        // dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+        //     val context = LocalContext.current
+        //     if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+        // }
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
@@ -81,4 +81,5 @@ fun Zero2023androidTheme(
 // FIXME: Need better way of extensions.
 object ColorSchemeExtension {
     val ColorScheme.textMain by mutableStateOf(Color(0xFF11184B), structuralEqualityPolicy())
+    val ColorScheme.bookCell by mutableStateOf(Color(0xFFFFFFFF), structuralEqualityPolicy())
 }
