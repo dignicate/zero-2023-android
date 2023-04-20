@@ -52,7 +52,7 @@ class BookRepositoryImpl @Inject constructor(
 private fun BookListDto.toDomain(): BookList {
     return BookList(
         books = books.map {
-            Book(
+            BookList.BookSummary(
                 id = Book.Id(it.id),
                 title = it.title,
                 author = it.author,

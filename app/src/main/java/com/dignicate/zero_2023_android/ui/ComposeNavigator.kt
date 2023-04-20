@@ -1,5 +1,6 @@
 package com.dignicate.zero_2023_android.ui
 
+import com.dignicate.zero_2023_android.domain.Book
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +19,7 @@ sealed class ComposeScreen(override val router: Router) : NavigationDestination 
             val ROUTER = router
         }
 
-        class BookDetail(val bookId: Long) : ComposeScreen(ROUTER) {
+        class BookDetail(val bookId: Book.Id) : ComposeScreen(ROUTER) {
             companion object {
                 val ROUTER = Router("book/detail", "book_id")
             }
