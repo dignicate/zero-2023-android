@@ -1,22 +1,28 @@
 package com.dignicate.zero_2023_android.data.service.api
 
+import android.content.Context
+import com.dignicate.zero_2023_android.R
 import okhttp3.Interceptor
 import okhttp3.MediaType
 import okhttp3.Protocol
 import okhttp3.Response
 import okhttp3.ResponseBody
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * https://wahibhaq.medium.com/an-easy-way-to-mock-an-api-response-using-retrofit-okhttp-and-interceptor-7968e1f0d050
  */
-class MockInterceptor : Interceptor {
+class MockInterceptor @Inject constructor(
+    private val context: Context,
+) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val path = chain.request().url().toString()
         Timber.d("path: $path")
         return if (path.endsWith("dummy/book/list")) {
-            proceedWithMockJson(chain, bookListMockResponse)
+            val response = context.resources.openRawResource(R.raw.book_list).bufferedReader().use { it.readText() }
+            proceedWithMockJson(chain, response)
         } else {
             chain.proceed(chain.request())
         }
@@ -38,7 +44,3 @@ class MockInterceptor : Interceptor {
             .build()
     }
 }
-
-private const val bookListMockResponse = """
-{ "books": [ { "title": "The War of the Worlds", "author": "H. G. Wells" }, { "title": "Dracula", "author": "Bram Stoker" }, { "title": "Oliver Twist", "author": "Charles Dickens" }, { "title": "Tess of the d'Urbervilles", "author": "Thomas Hardy" } ] }
-"""
