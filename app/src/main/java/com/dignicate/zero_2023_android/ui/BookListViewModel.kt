@@ -2,7 +2,6 @@ package com.dignicate.zero_2023_android.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dignicate.zero_2023_android.domain.Book
 import com.dignicate.zero_2023_android.domain.BookList
 import com.dignicate.zero_2023_android.domain.BookUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

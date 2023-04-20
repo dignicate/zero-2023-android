@@ -1,5 +1,6 @@
 package com.dignicate.zero_2023_android.ui
 
+import com.dignicate.zero_2023_android.domain.Book
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
