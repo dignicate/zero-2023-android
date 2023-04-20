@@ -11,21 +11,31 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.structuralEqualityPolicy
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
 
+/**
+ * https://developer.android.com/jetpack/compose/designsystems/material3
+ */
+
 private val DarkColorScheme: ColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    background = Color(0xFFEDF1F8),
+    // primary = Purple80,
+    // secondary = PurpleGrey80,
+    // tertiary = Pink80
 )
 
 private val LightColorScheme: ColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    background = Color(0xFFEDF1F8),
+    // primary = Purple40,
+    // secondary = PurpleGrey40,
+    // tertiary = Pink40
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -46,10 +56,10 @@ fun Zero2023androidTheme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
+        // dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+        //     val context = LocalContext.current
+        //     if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+        // }
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
@@ -66,4 +76,10 @@ fun Zero2023androidTheme(
         typography = Typography,
         content = content
     )
+}
+
+// FIXME: Need better way of extensions.
+object ColorSchemeExtension {
+    val ColorScheme.textMain by mutableStateOf(Color(0xFF11184B), structuralEqualityPolicy())
+    val ColorScheme.bookCell by mutableStateOf(Color(0xFFFFFFFF), structuralEqualityPolicy())
 }
