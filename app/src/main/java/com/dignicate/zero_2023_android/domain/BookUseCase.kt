@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 interface BookUseCase {
     val bookInfo: Flow<BookList>
-    val book: Flow<Book>
+    val bookDetail: Flow<Book>
     suspend fun fetchBookList()
     suspend fun fetchBookDetail(id: Book.Id)
 }
@@ -29,7 +29,7 @@ class BookUseCaseImpl @Inject constructor(
             }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val book: Flow<Book>
+    override val bookDetail: Flow<Book>
         get() = fetchBookDetailTrigger
             .flatMapLatest {
                 repository.fetchBookDetail(it)
