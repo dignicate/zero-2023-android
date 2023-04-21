@@ -32,7 +32,7 @@ class BookUseCaseImpl @Inject constructor(
     override val book: Flow<Book>
         get() = fetchBookDetailTrigger
             .flatMapLatest {
-                repository.fetchBookDetail()
+                repository.fetchBookDetail(it)
             }
 
     override suspend fun fetchBookList() {
@@ -40,6 +40,6 @@ class BookUseCaseImpl @Inject constructor(
     }
 
     override suspend fun fetchBookDetail(id: Book.Id) {
-        TODO("Not yet implemented")
+        fetchBookDetailTrigger.emit(id)
     }
 }
