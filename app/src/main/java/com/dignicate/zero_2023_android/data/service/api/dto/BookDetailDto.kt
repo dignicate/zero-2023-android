@@ -9,5 +9,10 @@ data class BookDetailDto(
     val id: Long,
     @SerialName("title")
     val title: String,
-
+    @SerialName("author")
+    val author: String,
+    @SerialName("published_at")
+    val publishedAt: String,
+    @SerialName("chapters")
+    val chapters: List<String>,
 )

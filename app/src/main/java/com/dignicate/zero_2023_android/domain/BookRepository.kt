@@ -4,5 +4,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface BookRepository {
     fun fetchBookList(): Flow<BookList>
-    fun fetchBookDetail(): Flow<Book>
+    fun fetchBookDetail(id: Book.Id): Flow<Book>
 }
