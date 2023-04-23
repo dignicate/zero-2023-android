@@ -14,7 +14,6 @@ import javax.inject.Inject
 @HiltViewModel
 class BookDetailViewModel @Inject constructor(
     private val useCase: BookUseCase,
-    private val navigator: ComposeNavigator,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState>(UiState.Initialized)
@@ -38,7 +37,6 @@ class BookDetailViewModel @Inject constructor(
             .collect {
                 _uiState.emit(UiState.Success(it.toViewData()))
             }
-
     }
 
     data class Data(

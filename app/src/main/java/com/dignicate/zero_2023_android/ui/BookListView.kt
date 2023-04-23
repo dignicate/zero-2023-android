@@ -1,6 +1,8 @@
 package com.dignicate.zero_2023_android.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +37,7 @@ import com.dignicate.zero_2023_android.ui.theme.Zero2023androidTheme
 fun BookListView(
     modifier: Modifier = Modifier,
     viewModel: BookListViewModel = hiltViewModel(),
+    onClick: (BookListViewModel.Data.Item.Id) -> Unit,
 ) {
     val lifecycleObserver = remember(viewModel) {
         LifecycleEventObserver { _, event ->
@@ -56,9 +59,7 @@ fun BookListView(
     BookListView(
         modifier = modifier,
         data = uiState.data,
-        onClick = {
-
-        }
+        onClick = { onClick.invoke(it) }
     )
 }
 
@@ -116,10 +117,18 @@ private fun BookListItemView(
                 color = MaterialTheme.colorScheme.bookCell,
                 shape = RoundedCornerShape(6.dp)
             )
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+            ) {
+              onClick.invoke(item.id)
+            }
+    ,
     ) {
         Column(
             modifier = modifier
-                .padding(horizontal = 24.dp, vertical = 24.dp),
+                .padding(horizontal = 24.dp, vertical = 24.dp)
+            ,
         ) {
             Text(
                 text = item.title,

@@ -4,12 +4,15 @@ import com.dignicate.zero_2023_android.domain.Book
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import timber.log.Timber
 
 /**
  * https://tabris.com/how-to-trigger-navigation-in-jetpack-compose-outside-of-composables/
  */
 interface NavigationDestination {
     val router: ComposeScreen.Router
+    val dynamicPath: String
+        get() = router.absolutePath
 }
 
 sealed class ComposeScreen(override val router: Router) : NavigationDestination {
@@ -20,6 +23,9 @@ sealed class ComposeScreen(override val router: Router) : NavigationDestination 
         }
 
         class BookDetail(val bookId: Book.Id) : ComposeScreen(ROUTER) {
+            override val dynamicPath: String
+                get() = router.absolutePathReplacing(bookId.value)
+
             companion object {
                 val ROUTER = Router("book/detail", "book_id")
             }
@@ -40,6 +46,14 @@ sealed class ComposeScreen(override val router: Router) : NavigationDestination 
                 }
                 return stringBuilder.toString()
             }
+
+        fun absolutePathReplacing(vararg values: Any): String {
+            val stringBuilder = StringBuilder(path)
+            values.forEach {
+                stringBuilder.append("/$it")
+            }
+            return stringBuilder.toString()
+        }
     }
 }
 
@@ -50,6 +64,7 @@ class ComposeNavigator {
         get() = _destination.asStateFlow()
 
     fun navigate(destination: NavigationDestination) {
+        Timber.d("navigate() destination: $destination")
         this._destination.value = destination
     }
 }

@@ -10,12 +10,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class BookListViewModel @Inject constructor(
     private val useCase: BookUseCase,
-    private val navigator: ComposeNavigator,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState>(UiState.Initialized)
@@ -32,10 +32,6 @@ class BookListViewModel @Inject constructor(
         viewModelScope.launch {
             useCase.fetchBookList()
         }
-    }
-
-    fun onBookClicked(id: Data.Item.Id) {
-        navigator.navigate(ComposeScreen.Main.BookDetail(Book.Id(id.value)))
     }
 
     private suspend fun setupCoroutine() {

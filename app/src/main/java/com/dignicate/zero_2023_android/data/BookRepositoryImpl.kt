@@ -63,6 +63,9 @@ class BookRepositoryImpl @Inject constructor(
                     Timber.e(t)
                 }
             })
+            awaitClose {
+                api.cancel()
+            }
         }
     }
 }
