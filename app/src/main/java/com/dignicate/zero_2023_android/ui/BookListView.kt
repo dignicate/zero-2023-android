@@ -70,6 +70,7 @@ fun BookListView(
 private fun BookListView(
     modifier: Modifier,
     data: BookListViewModel.Data?,
+    isInProgress: Boolean,
     onClick: (BookListViewModel.Data.Item.Id) -> Unit,
     onBackClicked: () -> Unit,
 ) {
@@ -178,6 +179,7 @@ private fun BookListView_Preview() {
                     )
                 )
             ),
+            isInProgress = false,
             onClick = {},
             onBackClicked = {},
         )

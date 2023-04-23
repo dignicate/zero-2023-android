@@ -68,6 +68,12 @@ class BookListViewModel @Inject constructor(
                 is InProgress -> value
                 is Failure, Initialized -> null
             }
+
+        val isInProgress: Boolean
+            get() = when (this) {
+                is InProgress -> true
+                is Success, is Failure, Initialized -> false
+            }
     }
 }
 
