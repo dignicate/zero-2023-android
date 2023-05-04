@@ -3,18 +3,16 @@ package com.dignicate.zero_2023_android.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dignicate.zero_2023_android.domain.Book
-import com.dignicate.zero_2023_android.domain.BookList
 import com.dignicate.zero_2023_android.domain.BookUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class BookListViewModel @Inject constructor(
+class BookDetailViewModel @Inject constructor(
     private val useCase: BookUseCase,
 ) : ViewModel() {
 
@@ -28,30 +26,25 @@ class BookListViewModel @Inject constructor(
         }
     }
 
-    fun onResume() {
+    fun onResume(id: Book.Id) {
         viewModelScope.launch {
-            useCase.fetchBookList()
+            useCase.fetchBookDetail(id)
         }
     }
 
     private suspend fun setupCoroutine() {
-        useCase.bookInfo
+        useCase.bookDetail
             .collect {
                 _uiState.emit(UiState.Success(it.toViewData()))
             }
     }
 
     data class Data(
-        val items: List<Item>,
-    ) {
-        data class Item(
-            val id: Id,
-            val title: String,
-            val author: String,
-        ) {
-            data class Id(val value: Long)
-        }
-    }
+        val title: String,
+        val author: String,
+        val publishedAt: String,
+        val chapters: List<String>,
+    )
 
     sealed interface UiState {
         data class Success(val value: Data) : UiState
@@ -68,14 +61,11 @@ class BookListViewModel @Inject constructor(
     }
 }
 
-private fun BookList.toViewData(): BookListViewModel.Data =
-    BookListViewModel.Data(
-        items = books.map { it.toViewData() }
-    )
-
-private fun BookList.BookSummary.toViewData(): BookListViewModel.Data.Item =
-    BookListViewModel.Data.Item(
-        id = BookListViewModel.Data.Item.Id(id.value),
+private fun Book.toViewData(): BookDetailViewModel.Data =
+    BookDetailViewModel.Data(
         title = title,
         author = author,
+        publishedAt = publishedAt,
+        chapters = chapters,
     )
+

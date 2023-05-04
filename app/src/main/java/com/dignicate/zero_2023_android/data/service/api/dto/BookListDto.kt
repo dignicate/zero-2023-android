@@ -1,15 +1,20 @@
 package com.dignicate.zero_2023_android.data.service.api.dto
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class BookListDto(
-    @SerializedName("books")
+    @SerialName("books")
     val books: List<Book>,
 ) {
+    @Serializable
     data class Book(
-        @SerializedName("title")
+        @SerialName("id")
+        val id: Long,
+        @SerialName("title")
         val title: String,
-        @SerializedName("author")
+        @SerialName("author")
         val author: String,
     )
 }

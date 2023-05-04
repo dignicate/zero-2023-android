@@ -14,16 +14,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.dignicate.zero_2023_android.domain.Book
 import com.dignicate.zero_2023_android.ui.theme.Zero2023androidTheme
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 /**
  * https://developer.android.com/jetpack/compose/navigation
@@ -67,21 +67,11 @@ private fun MainScreen(
     viewModel: MainViewModel,
 ) {
     val destination by viewModel.navigator.destination.collectAsState()
-    MainScreen(
-        modifier = modifier,
-        destination = destination,
-    )
-}
-
-@Composable
-private fun MainScreen(
-    modifier: Modifier,
-    destination: NavigationDestination,
-) {
     val navController = rememberNavController()
     LaunchedEffect(destination) {
+        Timber.d("current: ${navController.currentDestination?.route}, path: ${destination.router.path}")
         if (navController.currentDestination?.route != destination.router.path) {
-            navController.navigate(destination.router.absolutePath)
+            navController.navigate(destination.dynamicPath)
         }
     }
     Box(
@@ -93,14 +83,25 @@ private fun MainScreen(
             ) {
                 BookListView(
                     modifier = modifier,
+                    onClick = {
+                        viewModel.navigator.navigate(ComposeScreen.Main.BookDetail(Book.Id(it.value)))
+                    },
+                    onBackClicked = { navController.popBackStack() }
                 )
             }
             composable(
                 route = ComposeScreen.Main.BookDetail.ROUTER.absolutePath,
-                arguments = listOf(navArgument(ComposeScreen.Main.BookDetail.ROUTER.argumentKeys[0]) { type = NavType.LongType })
+                arguments = listOf(navArgument(ComposeScreen.Main.BookDetail.ROUTER.argumentKeys[0]) {
+                    type = NavType.LongType
+                })
             ) {
-                val bookId = it.arguments!!.getLong(ComposeScreen.Main.BookDetail.ROUTER.argumentKeys[0])
-                // TODO:
+                val bookId =
+                    it.arguments!!.getLong(ComposeScreen.Main.BookDetail.ROUTER.argumentKeys[0])
+                BookDetailView(
+                    modifier = modifier,
+                    id = Book.Id(bookId),
+                    onBackClicked = { navController.popBackStack() }
+                )
             }
             composable(
                 route = ComposeScreen.Unknown.router.absolutePath,

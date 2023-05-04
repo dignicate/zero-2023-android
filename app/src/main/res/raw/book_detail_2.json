@@ -1,0 +1,17 @@
+{
+  "id": 2,
+  "title": "Dracula",
+  "author": "Bram Stoker",
+  "published_at": "May 26, 1897",
+  "chapters": [
+    "Chapter I.",
+    "Chapter II.",
+    "Chapter III.",
+    "Chapter IV.",
+    "Chapter V.",
+    "Chapter VI.",
+    "Chapter VII.",
+    "Chapter VIII.",
+    "Chapter IX.",
+  ]
+}

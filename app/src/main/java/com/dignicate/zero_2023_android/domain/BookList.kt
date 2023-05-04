@@ -1,9 +1,10 @@
 package com.dignicate.zero_2023_android.domain
 
-data class BookInfo(
-    val books: List<Book>,
+data class BookList(
+    val books: List<BookSummary>,
 ) {
-    data class Book(
+    data class BookSummary(
+        val id: Book.Id,
         val title: String,
         val author: String,
     )

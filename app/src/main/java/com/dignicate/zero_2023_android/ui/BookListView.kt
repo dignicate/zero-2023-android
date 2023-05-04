@@ -1,6 +1,8 @@
 package com.dignicate.zero_2023_android.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +15,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -35,6 +38,8 @@ import com.dignicate.zero_2023_android.ui.theme.Zero2023androidTheme
 fun BookListView(
     modifier: Modifier = Modifier,
     viewModel: BookListViewModel = hiltViewModel(),
+    onClick: (BookListViewModel.Data.Item.Id) -> Unit,
+    onBackClicked: () -> Unit,
 ) {
     val lifecycleObserver = remember(viewModel) {
         LifecycleEventObserver { _, event ->
@@ -56,6 +61,8 @@ fun BookListView(
     BookListView(
         modifier = modifier,
         data = uiState.data,
+        onClick = { onClick.invoke(it) },
+        onBackClicked = onBackClicked,
     )
 }
 
@@ -63,35 +70,41 @@ fun BookListView(
 private fun BookListView(
     modifier: Modifier,
     data: BookListViewModel.Data?,
+    onClick: (BookListViewModel.Data.Item.Id) -> Unit,
+    onBackClicked: () -> Unit,
 ) {
     val state = rememberLazyGridState()
-    Column(
-        modifier = modifier
-            .background(
-                color = MaterialTheme.colorScheme.background,
-            ),
+    Scaffold(
+        topBar = {
+            BookListTopAppBar(
+                modifier = modifier,
+            )
+        }
     ) {
-        Text(
-            text = "Books",
+        Column(
             modifier = modifier
-                .padding(start = 12.dp, top = 6.dp),
-            style = MaterialTheme.typography.titleLarge,
-        )
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(159.dp),
-            state = state,
-            modifier = modifier
-                .padding(horizontal = 24.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                .padding(it)
+                .background(
+                    color = MaterialTheme.colorScheme.background,
+                ),
         ) {
-            val items = data?.items ?: emptyList()
-            items(items.size) { index ->
-                val item = items[index]
-                BookListItemView(
-                    modifier = modifier,
-                    item = item,
-                )
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(159.dp),
+                state = state,
+                modifier = modifier
+                    .padding(horizontal = 24.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                val items = data?.items ?: emptyList()
+                items(items.size) { index ->
+                    val item = items[index]
+                    BookListItemView(
+                        modifier = modifier,
+                        item = item,
+                        onClick = { id -> onClick.invoke(id) }
+                    )
+                }
             }
         }
     }
@@ -101,6 +114,7 @@ private fun BookListView(
 private fun BookListItemView(
     modifier: Modifier,
     item: BookListViewModel.Data.Item,
+    onClick: (BookListViewModel.Data.Item.Id) -> Unit,
 ) {
     Box(
         modifier
@@ -110,10 +124,18 @@ private fun BookListItemView(
                 color = MaterialTheme.colorScheme.bookCell,
                 shape = RoundedCornerShape(6.dp)
             )
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+            ) {
+                onClick.invoke(item.id)
+            }
+    ,
     ) {
         Column(
             modifier = modifier
-                .padding(horizontal = 24.dp, vertical = 24.dp),
+                .padding(horizontal = 24.dp, vertical = 24.dp)
+            ,
         ) {
             Text(
                 text = item.title,
@@ -145,15 +167,19 @@ private fun BookListView_Preview() {
             data = BookListViewModel.Data(
                 items = listOf(
                     BookListViewModel.Data.Item(
+                        id = BookListViewModel.Data.Item.Id(1L),
                         title = "Title 1",
                         author = "Author 1",
                     ),
                     BookListViewModel.Data.Item(
+                        id = BookListViewModel.Data.Item.Id(2L),
                         title = "Title 2",
                         author = "Author 2",
                     )
                 )
-            )
+            ),
+            onClick = {},
+            onBackClicked = {},
         )
     }
 }
@@ -165,9 +191,11 @@ private fun BookListItemView_Preview() {
         BookListItemView(
             modifier = Modifier,
             item = BookListViewModel.Data.Item(
+                id = BookListViewModel.Data.Item.Id(1L),
                 title = "The War of the Words",
                 author = "Author",
-            )
+            ),
+            onClick = {},
         )
     }
 }
