@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -38,6 +39,7 @@ fun BookListView(
     modifier: Modifier = Modifier,
     viewModel: BookListViewModel = hiltViewModel(),
     onClick: (BookListViewModel.Data.Item.Id) -> Unit,
+    onBackClicked: () -> Unit,
 ) {
     val lifecycleObserver = remember(viewModel) {
         LifecycleEventObserver { _, event ->
@@ -59,7 +61,8 @@ fun BookListView(
     BookListView(
         modifier = modifier,
         data = uiState.data,
-        onClick = { onClick.invoke(it) }
+        onClick = { onClick.invoke(it) },
+        onBackClicked = onBackClicked,
     )
 }
 
@@ -68,36 +71,41 @@ private fun BookListView(
     modifier: Modifier,
     data: BookListViewModel.Data?,
     onClick: (BookListViewModel.Data.Item.Id) -> Unit,
+    onBackClicked: () -> Unit,
 ) {
     val state = rememberLazyGridState()
-    Column(
-        modifier = modifier
-            .background(
-                color = MaterialTheme.colorScheme.background,
-            ),
+    Scaffold(
+        topBar = {
+            BookListTopAppBar(
+                modifier = modifier,
+                onBackClicked = onBackClicked,
+            )
+        }
     ) {
-        Text(
-            text = "Books",
+        Column(
             modifier = modifier
-                .padding(start = 12.dp, top = 6.dp),
-            style = MaterialTheme.typography.titleLarge,
-        )
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(159.dp),
-            state = state,
-            modifier = modifier
-                .padding(horizontal = 24.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                .padding(it)
+                .background(
+                    color = MaterialTheme.colorScheme.background,
+                ),
         ) {
-            val items = data?.items ?: emptyList()
-            items(items.size) { index ->
-                val item = items[index]
-                BookListItemView(
-                    modifier = modifier,
-                    item = item,
-                    onClick = { id -> onClick.invoke(id) }
-                )
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(159.dp),
+                state = state,
+                modifier = modifier
+                    .padding(horizontal = 24.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                val items = data?.items ?: emptyList()
+                items(items.size) { index ->
+                    val item = items[index]
+                    BookListItemView(
+                        modifier = modifier,
+                        item = item,
+                        onClick = { id -> onClick.invoke(id) }
+                    )
+                }
             }
         }
     }
@@ -121,7 +129,7 @@ private fun BookListItemView(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
             ) {
-              onClick.invoke(item.id)
+                onClick.invoke(item.id)
             }
     ,
     ) {
@@ -172,6 +180,7 @@ private fun BookListView_Preview() {
                 )
             ),
             onClick = {},
+            onBackClicked = {},
         )
     }
 }

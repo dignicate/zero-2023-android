@@ -85,14 +85,18 @@ private fun MainScreen(
                     modifier = modifier,
                     onClick = {
                         viewModel.navigator.navigate(ComposeScreen.Main.BookDetail(Book.Id(it.value)))
-                    }
+                    },
+                    onBackClicked = { navController.popBackStack() }
                 )
             }
             composable(
                 route = ComposeScreen.Main.BookDetail.ROUTER.absolutePath,
-                arguments = listOf(navArgument(ComposeScreen.Main.BookDetail.ROUTER.argumentKeys[0]) { type = NavType.LongType })
+                arguments = listOf(navArgument(ComposeScreen.Main.BookDetail.ROUTER.argumentKeys[0]) {
+                    type = NavType.LongType
+                })
             ) {
-                val bookId = it.arguments!!.getLong(ComposeScreen.Main.BookDetail.ROUTER.argumentKeys[0])
+                val bookId =
+                    it.arguments!!.getLong(ComposeScreen.Main.BookDetail.ROUTER.argumentKeys[0])
                 BookDetailView(
                     modifier = modifier,
                     id = Book.Id(bookId),
