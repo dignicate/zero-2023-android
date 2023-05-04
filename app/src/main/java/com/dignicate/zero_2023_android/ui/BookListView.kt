@@ -78,7 +78,6 @@ private fun BookListView(
         topBar = {
             BookListTopAppBar(
                 modifier = modifier,
-                onBackClicked = onBackClicked,
             )
         }
     ) {

@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -35,6 +36,7 @@ fun BookDetailView(
     id: Book.Id,
     modifier: Modifier = Modifier,
     viewModel: BookDetailViewModel = hiltViewModel(),
+    onBackClicked: () -> Unit,
 ) {
     val lifecycleObserver = remember(viewModel) {
         LifecycleEventObserver { _, event ->
@@ -56,6 +58,7 @@ fun BookDetailView(
     BookDetailView(
         modifier = modifier,
         data = uiState.data,
+        onBackClicked = onBackClicked,
     )
 }
 
@@ -63,59 +66,69 @@ fun BookDetailView(
 private fun BookDetailView(
     modifier: Modifier,
     data: BookDetailViewModel.Data?,
+    onBackClicked: () -> Unit,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(
-                color = MaterialTheme.colorScheme.background,
+    Scaffold(
+        topBar = {
+            BookDetailTopAppBar(
+                modifier = modifier,
+                onBackClicked = { onBackClicked.invoke() }
             )
-        ,
+        }
     ) {
         Column(
             modifier = modifier
-                .padding(horizontal = 12.dp, vertical = 12.dp)
+                .padding(it)
+                .fillMaxSize()
                 .background(
-                    color = MaterialTheme.colorScheme.bookCell,
-                    shape = RoundedCornerShape(6.dp),
-                )
-                .fillMaxWidth()
-                .height(140.dp),
+                    color = MaterialTheme.colorScheme.background,
+                ),
         ) {
-            Text(
+            Column(
                 modifier = modifier
-                    .height(68.dp)
-                    .padding(top = 12.dp, start = 12.dp),
-                text = data?.title ?: "",
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.textMain,
-                maxLines = 2,
-            )
-            Text(
-                modifier = modifier.padding(start = 12.dp),
-                text = data?.author ?: "",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.textMain,
-            )
-            Text(
-                modifier = modifier.padding(start = 12.dp),
-                text = data?.publishedAt ?: "",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.textMain,
-            )
-        }
-        Text(
-            modifier = modifier.padding(start = 12.dp),
-            text = "Chapters",
-            style = MaterialTheme.typography.titleMedium,
-        )
-        val state = rememberLazyListState()
-        LazyColumn {
-            items(data?.chapters ?: emptyList()) {
-                BookDetailItemView(
-                    modifier = modifier,
-                    item = it,
+                    .padding(horizontal = 12.dp, vertical = 12.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.bookCell,
+                        shape = RoundedCornerShape(6.dp),
+                    )
+                    .fillMaxWidth()
+                    .height(140.dp),
+            ) {
+                Text(
+                    modifier = modifier
+                        .height(68.dp)
+                        .padding(top = 12.dp, start = 12.dp),
+                    text = data?.title ?: "",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.textMain,
+                    maxLines = 2,
                 )
+                Text(
+                    modifier = modifier.padding(start = 12.dp),
+                    text = data?.author ?: "",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.textMain,
+                )
+                Text(
+                    modifier = modifier.padding(start = 12.dp),
+                    text = data?.publishedAt ?: "",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.textMain,
+                )
+            }
+            Text(
+                modifier = modifier.padding(start = 12.dp),
+                text = "Chapters",
+                style = MaterialTheme.typography.titleMedium,
+            )
+            val state = rememberLazyListState()
+            LazyColumn {
+                items(data?.chapters ?: emptyList()) {
+                    BookDetailItemView(
+                        modifier = modifier,
+                        item = it,
+                    )
+                }
             }
         }
     }
@@ -161,7 +174,8 @@ private fun BookDetailView_Preview() {
                     "Chapter III.",
                     "Chapter IV.",
                 )
-            )
+            ),
+            onBackClicked = {},
         )
     }
 }

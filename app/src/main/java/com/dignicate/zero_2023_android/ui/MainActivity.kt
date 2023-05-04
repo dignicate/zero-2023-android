@@ -100,6 +100,7 @@ private fun MainScreen(
                 BookDetailView(
                     modifier = modifier,
                     id = Book.Id(bookId),
+                    onBackClicked = { navController.popBackStack() }
                 )
             }
             composable(
