@@ -18,6 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.dignicate.zero_2023_android.domain.Book
@@ -100,12 +101,11 @@ private fun MainScreen(
                 BookDetailView(
                     modifier = modifier,
                     id = Book.Id(bookId),
-                    onBackClicked = { navController.popBackStack() }
+                    onBackClicked = { navController.popBackStack() },
+                    onItemClicked = { viewModel.navigator.navigate(MainScreen.GoToDifferent) },
                 )
             }
-            composable(
-                route = MainScreen.GoToDifferent.ROUTER.absolutePath,
-            ) {
+            composable(route = MainScreen.GoToDifferent.ROUTER.absolutePath) {
                 val differentNavController = rememberNavController()
                 DifferentNavHost(differentNavController)
             }

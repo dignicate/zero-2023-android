@@ -1,6 +1,7 @@
 package com.dignicate.zero_2023_android.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,6 +38,7 @@ fun BookDetailView(
     modifier: Modifier = Modifier,
     viewModel: BookDetailViewModel = hiltViewModel(),
     onBackClicked: () -> Unit,
+    onItemClicked: () -> Unit,
 ) {
     val lifecycleObserver = remember(viewModel) {
         LifecycleEventObserver { _, event ->
@@ -59,6 +61,7 @@ fun BookDetailView(
         modifier = modifier,
         data = uiState.data,
         onBackClicked = onBackClicked,
+        onItemClicked = onItemClicked,
     )
 }
 
@@ -67,6 +70,7 @@ private fun BookDetailView(
     modifier: Modifier,
     data: BookDetailViewModel.Data?,
     onBackClicked: () -> Unit,
+    onItemClicked: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -127,6 +131,9 @@ private fun BookDetailView(
                     BookDetailItemView(
                         modifier = modifier,
                         item = it,
+                        onClick = {
+
+                        },
                     )
                 }
             }
@@ -138,6 +145,7 @@ private fun BookDetailView(
 private fun BookDetailItemView(
     modifier: Modifier,
     item: String,
+    onClick: () -> Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
@@ -145,6 +153,9 @@ private fun BookDetailItemView(
             .padding(horizontal = 12.dp, vertical = 2.dp)
             .fillMaxWidth()
             .height(40.dp)
+            .clickable {
+                onClick.invoke()
+            }
             .background(
                 color = MaterialTheme.colorScheme.bookCell,
                 shape = RoundedCornerShape(6.dp),
@@ -176,6 +187,7 @@ private fun BookDetailView_Preview() {
                 )
             ),
             onBackClicked = {},
+            onItemClicked = {},
         )
     }
 }
@@ -187,6 +199,7 @@ private fun BookDetailItemView_Preview() {
         BookDetailItemView(
             modifier = Modifier,
             item = "Chapter I.",
+            onClick = {},
         )
     }
 }
