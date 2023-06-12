@@ -77,31 +77,37 @@ private fun MainScreen(
     Box(
         modifier = modifier,
     ) {
-        NavHost(navController, startDestination = ComposeScreen.Main.BookList.ROUTER.absolutePath) {
+        NavHost(navController, startDestination = MainScreen.BookList.ROUTER.absolutePath) {
             composable(
-                route = ComposeScreen.Main.BookList.ROUTER.absolutePath,
+                route = MainScreen.BookList.ROUTER.absolutePath,
             ) {
                 BookListView(
                     modifier = modifier,
                     onClick = {
-                        viewModel.navigator.navigate(ComposeScreen.Main.BookDetail(Book.Id(it.value)))
+                        viewModel.navigator.navigate(MainScreen.BookDetail(Book.Id(it.value)))
                     },
                     onBackClicked = { navController.popBackStack() }
                 )
             }
             composable(
-                route = ComposeScreen.Main.BookDetail.ROUTER.absolutePath,
-                arguments = listOf(navArgument(ComposeScreen.Main.BookDetail.ROUTER.argumentKeys[0]) {
+                route = MainScreen.BookDetail.ROUTER.absolutePath,
+                arguments = listOf(navArgument(MainScreen.BookDetail.ROUTER.argumentKeys[0]) {
                     type = NavType.LongType
                 })
             ) {
                 val bookId =
-                    it.arguments!!.getLong(ComposeScreen.Main.BookDetail.ROUTER.argumentKeys[0])
+                    it.arguments!!.getLong(MainScreen.BookDetail.ROUTER.argumentKeys[0])
                 BookDetailView(
                     modifier = modifier,
                     id = Book.Id(bookId),
                     onBackClicked = { navController.popBackStack() }
                 )
+            }
+            composable(
+                route = MainScreen.GoToDifferent.ROUTER.absolutePath,
+            ) {
+                val differentNavController = rememberNavController()
+                DifferentNavHost(differentNavController)
             }
             composable(
                 route = ComposeScreen.Unknown.router.absolutePath,
@@ -113,5 +119,24 @@ private fun MainScreen(
                 )
             }
         }
+    }
+}
+
+object MainScreen {
+    object BookList : ComposeScreen(Router("book/list")) {
+        val ROUTER = router
+    }
+
+    class BookDetail(val bookId: Book.Id) : ComposeScreen(ROUTER) {
+        override val dynamicPath: String
+            get() = router.absolutePathReplacing(bookId.value)
+
+        companion object {
+            val ROUTER = Router("book/detail", "book_id")
+        }
+    }
+
+    object GoToDifferent : ComposeScreen(Router("book/different")) {
+        val ROUTER = router
     }
 }
