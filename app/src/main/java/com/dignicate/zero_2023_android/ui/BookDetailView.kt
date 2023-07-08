@@ -126,13 +126,15 @@ private fun BookDetailView(
                 style = MaterialTheme.typography.titleMedium,
             )
             val state = rememberLazyListState()
-            LazyColumn {
+            LazyColumn(
+                state = state,
+            ) {
                 items(data?.chapters ?: emptyList()) { item ->
                     BookDetailItemView(
                         modifier = modifier,
                         item = item,
                         onClick = {
-
+                            onItemClicked.invoke()
                         },
                     )
                 }

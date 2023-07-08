@@ -102,26 +102,20 @@ private fun MainScreenNavHost(
                     id = Book.Id(bookId),
                     onBackClicked = { navController.popBackStack() },
                     onItemClicked = {
-//                        viewModel.navigator.navigate(MainScreen.GoToDifferent)
                         viewModel.navigator.navigate(DifferentScreen.Top)
                     },
                 )
             }
-//            loadDifferentNavHost(navController = navController)
-//            composable(route = MainScreen.GoToDifferent.ROUTER.absolutePath) {
-//                val differentNavController = rememberNavController()
-//                DifferentNavHost(differentNavController)
-//            }
             composable(
                 route = ComposeScreen.Unknown.router.absolutePath,
             ) {
-                // Empty
                 Text(
                     text = "Empty",
                     modifier = modifier,
                 )
             }
 
+            // 別定義の NavHost を読み込む
             loadDifferentNavHost(navController = navController)
         }
     }
@@ -132,7 +126,7 @@ object MainScreen {
         val ROUTER = router
     }
 
-    class BookDetail(val bookId: Book.Id) : ComposeScreen(ROUTER) {
+    class BookDetail(private val bookId: Book.Id) : ComposeScreen(ROUTER) {
         override val dynamicPath: String
             get() = router.absolutePathReplacing(bookId.value)
 
@@ -140,8 +134,4 @@ object MainScreen {
             val ROUTER = Router("book/detail", "book_id")
         }
     }
-
-//    object GoToDifferent : ComposeScreen(Router("book/different")) {
-//        val ROUTER = router
-//    }
 }
