@@ -61,6 +61,7 @@ fun BookListView(
     BookListView(
         modifier = modifier,
         data = uiState.data,
+        isInProgress = false,
         onClick = { onClick.invoke(it) },
         onBackClicked = onBackClicked,
     )
