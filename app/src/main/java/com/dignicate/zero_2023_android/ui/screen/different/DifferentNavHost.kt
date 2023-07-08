@@ -1,4 +1,4 @@
-package com.dignicate.zero_2023_android.ui
+package com.dignicate.zero_2023_android.ui.screen.different
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.dignicate.zero_2023_android.ui.ComposeScreen
 import timber.log.Timber
 
 @Composable
