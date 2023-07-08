@@ -41,7 +41,8 @@ class BookDetailViewModel @Inject constructor(
                     is Resource.Success -> {
                         _uiState.value =
                             _uiState.value.copy(
-                                book = resource.value.toViewData()
+                                book = resource.value.toViewData(),
+                                showsLoadingIndicator = false,
                             )
                     }
                     is Resource.InProgress -> {
