@@ -127,10 +127,10 @@ private fun BookDetailView(
             )
             val state = rememberLazyListState()
             LazyColumn {
-                items(data?.chapters ?: emptyList()) {
+                items(data?.chapters ?: emptyList()) { item ->
                     BookDetailItemView(
                         modifier = modifier,
-                        item = it,
+                        item = item,
                         onClick = {
 
                         },

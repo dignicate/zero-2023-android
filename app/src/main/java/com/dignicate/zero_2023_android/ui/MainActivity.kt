@@ -18,7 +18,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.dignicate.zero_2023_android.domain.Book
@@ -47,7 +46,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen(
+                    MainScreenNavHost(
                         modifier = Modifier,
                         viewModel = hiltViewModel(),
                     )
@@ -63,7 +62,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun MainScreen(
+private fun MainScreenNavHost(
     modifier: Modifier,
     viewModel: MainViewModel,
 ) {
@@ -102,13 +101,17 @@ private fun MainScreen(
                     modifier = modifier,
                     id = Book.Id(bookId),
                     onBackClicked = { navController.popBackStack() },
-                    onItemClicked = { viewModel.navigator.navigate(MainScreen.GoToDifferent) },
+                    onItemClicked = {
+//                        viewModel.navigator.navigate(MainScreen.GoToDifferent)
+                        viewModel.navigator.navigate(DifferentScreen.Top)
+                    },
                 )
             }
-            composable(route = MainScreen.GoToDifferent.ROUTER.absolutePath) {
-                val differentNavController = rememberNavController()
-                DifferentNavHost(differentNavController)
-            }
+//            loadDifferentNavHost(navController = navController)
+//            composable(route = MainScreen.GoToDifferent.ROUTER.absolutePath) {
+//                val differentNavController = rememberNavController()
+//                DifferentNavHost(differentNavController)
+//            }
             composable(
                 route = ComposeScreen.Unknown.router.absolutePath,
             ) {
@@ -118,6 +121,8 @@ private fun MainScreen(
                     modifier = modifier,
                 )
             }
+
+            loadDifferentNavHost(navController = navController)
         }
     }
 }
@@ -136,7 +141,7 @@ object MainScreen {
         }
     }
 
-    object GoToDifferent : ComposeScreen(Router("book/different")) {
-        val ROUTER = router
-    }
+//    object GoToDifferent : ComposeScreen(Router("book/different")) {
+//        val ROUTER = router
+//    }
 }
