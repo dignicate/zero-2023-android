@@ -21,6 +21,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
@@ -61,6 +62,7 @@ fun BookDetailView(
         modifier = modifier,
         book = uiState.book,
         showsLoadingIndicator = uiState.showsLoadingIndicator,
+        errorMessage = uiState.errorMessage,
         onBackClicked = onBackClicked,
         onItemClicked = onItemClicked,
     )
@@ -71,6 +73,7 @@ private fun BookDetailView(
     modifier: Modifier,
     book: BookDetailViewModel.UiState.Book?,
     showsLoadingIndicator: Boolean,
+    errorMessage: String?,
     onBackClicked: () -> Unit,
     onItemClicked: () -> Unit,
 ) {
@@ -148,6 +151,18 @@ private fun BookDetailView(
             if (showsLoadingIndicator) {
                 IndicatorView()
             }
+            if (errorMessage != null) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = errorMessage,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
+            }
         }
     }
 }
@@ -198,6 +213,7 @@ private fun BookDetailView_Preview() {
                 )
             ),
             showsLoadingIndicator = false,
+            errorMessage = null,
             onBackClicked = {},
             onItemClicked = {},
         )
