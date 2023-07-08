@@ -38,7 +38,7 @@ import com.dignicate.zero_2023_android.ui.theme.Zero2023androidTheme
 fun BookListView(
     modifier: Modifier = Modifier,
     viewModel: BookListViewModel = hiltViewModel(),
-    onClick: (BookListViewModel.Data.Item.Id) -> Unit,
+    onClick: (BookListViewModel.UiState.BookSummary.Id) -> Unit,
     onBackClicked: () -> Unit,
 ) {
     val lifecycleObserver = remember(viewModel) {
@@ -60,8 +60,8 @@ fun BookListView(
     val uiState by viewModel.uiState.collectAsState()
     BookListView(
         modifier = modifier,
-        data = uiState.data,
-        isInProgress = false,
+        books = uiState.books,
+        showsLoadingIndicator = uiState.showsLoadingIndicator,
         onClick = { onClick.invoke(it) },
         onBackClicked = onBackClicked,
     )
@@ -70,9 +70,9 @@ fun BookListView(
 @Composable
 private fun BookListView(
     modifier: Modifier,
-    data: BookListViewModel.Data?,
-    isInProgress: Boolean,
-    onClick: (BookListViewModel.Data.Item.Id) -> Unit,
+    books: List<BookListViewModel.UiState.BookSummary>,
+    showsLoadingIndicator: Boolean,
+    onClick: (BookListViewModel.UiState.BookSummary.Id) -> Unit,
     onBackClicked: () -> Unit,
 ) {
     val state = rememberLazyGridState()
@@ -98,13 +98,14 @@ private fun BookListView(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                val items = data?.items ?: emptyList()
-                items(items.size) { index ->
-                    val item = items[index]
+                items(books.size) { index ->
+                    val item = books[index]
                     BookListItemView(
                         modifier = modifier,
                         item = item,
-                        onClick = { id -> onClick.invoke(id) }
+                        onClick = { id ->
+                            onClick.invoke(id)
+                        }
                     )
                 }
             }
@@ -115,8 +116,8 @@ private fun BookListView(
 @Composable
 private fun BookListItemView(
     modifier: Modifier,
-    item: BookListViewModel.Data.Item,
-    onClick: (BookListViewModel.Data.Item.Id) -> Unit,
+    item: BookListViewModel.UiState.BookSummary,
+    onClick: (BookListViewModel.UiState.BookSummary.Id) -> Unit,
 ) {
     Box(
         modifier
@@ -166,21 +167,19 @@ private fun BookListView_Preview() {
     Zero2023androidTheme {
         BookListView(
             modifier = Modifier,
-            data = BookListViewModel.Data(
-                items = listOf(
-                    BookListViewModel.Data.Item(
-                        id = BookListViewModel.Data.Item.Id(1L),
-                        title = "Title 1",
-                        author = "Author 1",
-                    ),
-                    BookListViewModel.Data.Item(
-                        id = BookListViewModel.Data.Item.Id(2L),
-                        title = "Title 2",
-                        author = "Author 2",
-                    )
+            books = listOf(
+                BookListViewModel.UiState.BookSummary(
+                    id = BookListViewModel.UiState.BookSummary.Id(1L),
+                    title = "Title 1",
+                    author = "Author 1",
+                ),
+                BookListViewModel.UiState.BookSummary(
+                    id = BookListViewModel.UiState.BookSummary.Id(2L),
+                    title = "Title 2",
+                    author = "Author 2",
                 )
             ),
-            isInProgress = false,
+            showsLoadingIndicator = false,
             onClick = {},
             onBackClicked = {},
         )
@@ -193,8 +192,8 @@ private fun BookListItemView_Preview() {
     Zero2023androidTheme {
         BookListItemView(
             modifier = Modifier,
-            item = BookListViewModel.Data.Item(
-                id = BookListViewModel.Data.Item.Id(1L),
+            item = BookListViewModel.UiState.BookSummary(
+                id = BookListViewModel.UiState.BookSummary.Id(1L),
                 title = "The War of the Words",
                 author = "Author",
             ),
