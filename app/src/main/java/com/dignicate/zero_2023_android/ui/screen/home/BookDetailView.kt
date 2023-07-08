@@ -59,7 +59,7 @@ fun BookDetailView(
     val uiState by viewModel.uiState.collectAsState()
     BookDetailView(
         modifier = modifier,
-        data = uiState.data,
+        book = uiState.book,
         onBackClicked = onBackClicked,
         onItemClicked = onItemClicked,
     )
@@ -68,7 +68,7 @@ fun BookDetailView(
 @Composable
 private fun BookDetailView(
     modifier: Modifier,
-    data: BookDetailViewModel.Data?,
+    book: BookDetailViewModel.UiState.Book?,
     onBackClicked: () -> Unit,
     onItemClicked: () -> Unit,
 ) {
@@ -102,20 +102,20 @@ private fun BookDetailView(
                     modifier = modifier
                         .height(68.dp)
                         .padding(top = 12.dp, start = 12.dp),
-                    text = data?.title ?: "",
+                    text = book?.title ?: "",
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.textMain,
                     maxLines = 2,
                 )
                 Text(
                     modifier = modifier.padding(start = 12.dp),
-                    text = data?.author ?: "",
+                    text = book?.author ?: "",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.textMain,
                 )
                 Text(
                     modifier = modifier.padding(start = 12.dp),
-                    text = data?.publishedAt ?: "",
+                    text = book?.publishedAt ?: "",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.textMain,
                 )
@@ -129,7 +129,7 @@ private fun BookDetailView(
             LazyColumn(
                 state = state,
             ) {
-                items(data?.chapters ?: emptyList()) { item ->
+                items(book?.chapters ?: emptyList()) { item ->
                     BookDetailItemView(
                         modifier = modifier,
                         item = item,
@@ -177,7 +177,7 @@ private fun BookDetailView_Preview() {
     Zero2023androidTheme {
         BookDetailView(
             modifier = Modifier,
-            data = BookDetailViewModel.Data(
+            book = BookDetailViewModel.UiState.Book(
                 title = "Title 1",
                 author = "Author 1",
                 publishedAt = "2023",

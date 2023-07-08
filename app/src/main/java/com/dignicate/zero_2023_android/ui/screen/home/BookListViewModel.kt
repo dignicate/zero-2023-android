@@ -4,11 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dignicate.zero_2023_android.domain.BookList
 import com.dignicate.zero_2023_android.domain.BookUseCase
+import com.dignicate.zero_2023_android.domain.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,13 +22,13 @@ class BookListViewModel @Inject constructor(
 
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    fun onCreate() {
+    init {
         viewModelScope.launch {
             setupCoroutine()
         }
     }
 
-    fun onResume() {
+    fun onCreate() {
         viewModelScope.launch {
             useCase.fetchBookList()
         }
@@ -34,14 +36,26 @@ class BookListViewModel @Inject constructor(
 
     private suspend fun setupCoroutine() {
         useCase.bookInfo
-            .collect { bookList ->
-                _uiState.value =
-                    _uiState.value
-                        .copy(
-                            books = bookList.books.map {
-                                it.toViewData()
-                            }
-                        )
+            .collect { resource ->
+                when (resource) {
+                    is Resource.Success -> {
+                        val bookList = resource.value
+                        _uiState.value =
+                            _uiState.value
+                                .copy(
+                                    books = bookList.books.map {
+                                        it.toViewData()
+                                    },
+                                    showsLoadingIndicator = false,
+                                )
+                    }
+                    is Resource.InProgress -> {
+                        _uiState.value = _uiState.value.copy(showsLoadingIndicator = true)
+                    }
+                    is Resource.Error -> {
+                        Timber.e(resource.throwable)
+                    }
+                }
             }
     }
 

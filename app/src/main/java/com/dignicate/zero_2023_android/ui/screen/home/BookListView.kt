@@ -45,8 +45,6 @@ fun BookListView(
         LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_CREATE) {
                 viewModel.onCreate()
-            } else if (event == Lifecycle.Event.ON_RESUME) {
-                viewModel.onResume()
             }
         }
     }
