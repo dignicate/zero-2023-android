@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import com.dignicate.zero_2023_android.ui.IndicatorView
 import com.dignicate.zero_2023_android.ui.theme.ColorSchemeExtension.bookCell
 import com.dignicate.zero_2023_android.ui.theme.ColorSchemeExtension.textMain
 import com.dignicate.zero_2023_android.ui.theme.TypographyExtension.bodyTitle
@@ -80,31 +81,38 @@ private fun BookListView(
             )
         }
     ) {
-        Column(
+        Box(
             modifier = modifier
                 .padding(it)
                 .background(
                     color = MaterialTheme.colorScheme.background,
                 ),
         ) {
-            LazyVerticalGrid(
-                columns = GridCells.Adaptive(159.dp),
-                state = state,
-                modifier = modifier
-                    .padding(horizontal = 24.dp, vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
+            Column(
+                modifier = Modifier,
             ) {
-                items(books.size) { index ->
-                    val item = books[index]
-                    BookListItemView(
-                        modifier = modifier,
-                        item = item,
-                        onClick = { id ->
-                            onClick.invoke(id)
-                        }
-                    )
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(159.dp),
+                    state = state,
+                    modifier = modifier
+                        .padding(horizontal = 24.dp, vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    items(books.size) { index ->
+                        val item = books[index]
+                        BookListItemView(
+                            modifier = modifier,
+                            item = item,
+                            onClick = { id ->
+                                onClick.invoke(id)
+                            }
+                        )
+                    }
                 }
+            }
+            if (showsLoadingIndicator) {
+                IndicatorView()
             }
         }
     }

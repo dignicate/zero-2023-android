@@ -77,5 +77,7 @@ fun Zero2023androidTheme(
 // FIXME: Need better way of extensions.
 object ColorSchemeExtension {
     val ColorScheme.textMain by mutableStateOf(Color(0xFF11184B), structuralEqualityPolicy())
+    val ColorScheme.textWhite by mutableStateOf(Color(0xFFFFFFFF), structuralEqualityPolicy())
     val ColorScheme.bookCell by mutableStateOf(Color(0xFFFFFFFF), structuralEqualityPolicy())
+    val ColorScheme.bgGray by mutableStateOf(Color(0x70000000), structuralEqualityPolicy())
 }
