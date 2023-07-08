@@ -86,7 +86,6 @@ private fun MainScreenNavHost(
                     onClick = {
                         viewModel.navigator.navigate(MainScreen.BookDetail(Book.Id(it.value)))
                     },
-                    onBackClicked = { navController.popBackStack() }
                 )
             }
             composable(

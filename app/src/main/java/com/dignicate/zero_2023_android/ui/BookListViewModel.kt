@@ -16,7 +16,7 @@ class BookListViewModel @Inject constructor(
     private val useCase: BookUseCase,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<UiState>(UiState.create())
+    private val _uiState = MutableStateFlow(UiState.create())
 
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
@@ -27,12 +27,6 @@ class BookListViewModel @Inject constructor(
     }
 
     fun onResume() {
-        viewModelScope.launch {
-            useCase.fetchBookList()
-        }
-    }
-
-    fun onBookClicked(id: UiState.BookSummary.Id) {
         viewModelScope.launch {
             useCase.fetchBookList()
         }

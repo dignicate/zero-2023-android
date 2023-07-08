@@ -39,7 +39,6 @@ fun BookListView(
     modifier: Modifier = Modifier,
     viewModel: BookListViewModel = hiltViewModel(),
     onClick: (BookListViewModel.UiState.BookSummary.Id) -> Unit,
-    onBackClicked: () -> Unit,
 ) {
     val lifecycleObserver = remember(viewModel) {
         LifecycleEventObserver { _, event ->
@@ -63,7 +62,6 @@ fun BookListView(
         books = uiState.books,
         showsLoadingIndicator = uiState.showsLoadingIndicator,
         onClick = { onClick.invoke(it) },
-        onBackClicked = onBackClicked,
     )
 }
 
@@ -73,7 +71,6 @@ private fun BookListView(
     books: List<BookListViewModel.UiState.BookSummary>,
     showsLoadingIndicator: Boolean,
     onClick: (BookListViewModel.UiState.BookSummary.Id) -> Unit,
-    onBackClicked: () -> Unit,
 ) {
     val state = rememberLazyGridState()
     Scaffold(
@@ -181,7 +178,6 @@ private fun BookListView_Preview() {
             ),
             showsLoadingIndicator = false,
             onClick = {},
-            onBackClicked = {},
         )
     }
 }
