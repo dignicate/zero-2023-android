@@ -71,7 +71,6 @@ fun NavGraphBuilder.loadDifferentNavHost(
                 )
                 Button(
                     onClick = {
-//                        viewModel.navigator.navigate(DifferentScreen.Detail)
                         navController.navigate(DifferentScreen.Detail.dynamicPath)
                     },
                 ) {
