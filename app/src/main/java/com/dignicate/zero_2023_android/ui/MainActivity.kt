@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen(
+                    MainScreenNavHost(
                         modifier = Modifier,
                         viewModel = hiltViewModel(),
                     )
@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun MainScreen(
+private fun MainScreenNavHost(
     modifier: Modifier,
     viewModel: MainViewModel,
 ) {
@@ -77,41 +77,61 @@ private fun MainScreen(
     Box(
         modifier = modifier,
     ) {
-        NavHost(navController, startDestination = ComposeScreen.Main.BookList.ROUTER.absolutePath) {
+        NavHost(navController, startDestination = MainScreen.BookList.ROUTER.absolutePath) {
             composable(
-                route = ComposeScreen.Main.BookList.ROUTER.absolutePath,
+                route = MainScreen.BookList.ROUTER.absolutePath,
             ) {
                 BookListView(
                     modifier = modifier,
                     onClick = {
-                        viewModel.navigator.navigate(ComposeScreen.Main.BookDetail(Book.Id(it.value)))
+                        viewModel.navigator.navigate(MainScreen.BookDetail(Book.Id(it.value)))
                     },
                     onBackClicked = { navController.popBackStack() }
                 )
             }
             composable(
-                route = ComposeScreen.Main.BookDetail.ROUTER.absolutePath,
-                arguments = listOf(navArgument(ComposeScreen.Main.BookDetail.ROUTER.argumentKeys[0]) {
+                route = MainScreen.BookDetail.ROUTER.absolutePath,
+                arguments = listOf(navArgument(MainScreen.BookDetail.ROUTER.argumentKeys[0]) {
                     type = NavType.LongType
                 })
             ) {
                 val bookId =
-                    it.arguments!!.getLong(ComposeScreen.Main.BookDetail.ROUTER.argumentKeys[0])
+                    it.arguments!!.getLong(MainScreen.BookDetail.ROUTER.argumentKeys[0])
                 BookDetailView(
                     modifier = modifier,
                     id = Book.Id(bookId),
-                    onBackClicked = { navController.popBackStack() }
+                    onBackClicked = { navController.popBackStack() },
+                    onItemClicked = {
+                        viewModel.navigator.navigate(DifferentScreen.Top)
+                    },
                 )
             }
             composable(
                 route = ComposeScreen.Unknown.router.absolutePath,
             ) {
-                // Empty
                 Text(
                     text = "Empty",
                     modifier = modifier,
                 )
             }
+
+            // 別定義の NavHost を読み込む
+            loadDifferentNavHost(navController = navController)
+        }
+    }
+}
+
+object MainScreen {
+    object BookList : ComposeScreen(Router("book/list")) {
+        val ROUTER = router
+    }
+
+    class BookDetail(private val bookId: Book.Id) : ComposeScreen(ROUTER) {
+        override val dynamicPath: String
+            get() = router.absolutePathReplacing(bookId.value)
+
+        companion object {
+            val ROUTER = Router("book/detail", "book_id")
         }
     }
 }

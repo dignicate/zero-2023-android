@@ -19,7 +19,7 @@ class MockInterceptor @Inject constructor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val path = chain.request().url.toString()
-        Timber.d("path: $path")
+        Timber.d("intercept() path: $path")
         return if (path.endsWith("dummy/book/list")) {
             val response = context.resources.openRawResource(R.raw.book_list).bufferedReader().use { it.readText() }
             proceedWithMockJson(chain, response)

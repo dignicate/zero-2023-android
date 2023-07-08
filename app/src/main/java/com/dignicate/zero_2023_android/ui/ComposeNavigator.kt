@@ -1,6 +1,5 @@
 package com.dignicate.zero_2023_android.ui
 
-import com.dignicate.zero_2023_android.domain.Book
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,22 +14,7 @@ interface NavigationDestination {
         get() = router.absolutePath
 }
 
-sealed class ComposeScreen(override val router: Router) : NavigationDestination {
-
-    object Main {
-        object BookList : ComposeScreen(Router("book/list")) {
-            val ROUTER = router
-        }
-
-        class BookDetail(val bookId: Book.Id) : ComposeScreen(ROUTER) {
-            override val dynamicPath: String
-                get() = router.absolutePathReplacing(bookId.value)
-
-            companion object {
-                val ROUTER = Router("book/detail", "book_id")
-            }
-        }
-    }
+abstract class ComposeScreen(override val router: Router) : NavigationDestination {
 
     object Unknown : ComposeScreen(Router("unknown"))
 
