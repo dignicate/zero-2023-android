@@ -1,4 +1,4 @@
-package com.dignicate.zero_2023_android.ui
+package com.dignicate.zero_2023_android.ui.screen
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -21,6 +21,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.dignicate.zero_2023_android.domain.Book
+import com.dignicate.zero_2023_android.ui.ComposeScreen
+import com.dignicate.zero_2023_android.ui.screen.different.DifferentScreen
+import com.dignicate.zero_2023_android.ui.screen.different.loadDifferentNavHost
+import com.dignicate.zero_2023_android.ui.screen.home.BookDetailView
+import com.dignicate.zero_2023_android.ui.screen.home.BookListView
 import com.dignicate.zero_2023_android.ui.theme.Zero2023androidTheme
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -86,7 +91,6 @@ private fun MainScreenNavHost(
                     onClick = {
                         viewModel.navigator.navigate(MainScreen.BookDetail(Book.Id(it.value)))
                     },
-                    onBackClicked = { navController.popBackStack() }
                 )
             }
             composable(

@@ -1,4 +1,4 @@
-package com.dignicate.zero_2023_android.ui
+package com.dignicate.zero_2023_android.ui.screen.home
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,29 +17,41 @@ import com.dignicate.zero_2023_android.ui.theme.Zero2023androidTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookListTopAppBar(
+fun BookDetailTopAppBar(
     modifier: Modifier = Modifier,
+    onBackClicked: () -> Unit,
 ) {
     TopAppBar(
         modifier = modifier,
         title = {
             Text(
-                text = "Book List",
+                text = "Book Detail",
                 modifier = modifier
                     .fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleLarge,
             )
         },
+        navigationIcon = {
+            IconButton(
+                onClick = { onBackClicked.invoke() },
+            ) {
+                Icon(
+                    painterResource(id = R.drawable.material_arrow_back_40),
+                    contentDescription = "Back",
+                )
+            }
+        },
     )
 }
 
 @Preview
 @Composable
-fun BookListTopAppBar_Preview() {
+fun BookDetailTopAppBar_Preview() {
     Zero2023androidTheme {
-        BookListTopAppBar(
+        BookDetailTopAppBar(
             modifier = Modifier,
+            onBackClicked = {},
         )
     }
 }

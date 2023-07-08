@@ -3,12 +3,13 @@ package com.dignicate.zero_2023_android.domain
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 interface BookUseCase {
-    val bookInfo: Flow<BookList>
-    val bookDetail: Flow<Book>
+    val bookInfo: Flow<Resource<BookList>>
+    val bookDetail: Flow<Resource<Book>>
     suspend fun fetchBookList()
     suspend fun fetchBookDetail(id: Book.Id)
 }
@@ -22,17 +23,37 @@ class BookUseCaseImpl @Inject constructor(
     private val fetchBookDetailTrigger = MutableSharedFlow<Book.Id>()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val bookInfo: Flow<BookList>
-        get() = fetchBookListTrigger
+    override val bookInfo: Flow<Resource<BookList>> =
+        fetchBookListTrigger
             .flatMapLatest {
-                repository.fetchBookList()
+                channelFlow {
+                    send(Resource.InProgress)
+                    try {
+                        repository.fetchBookList()
+                            .collect {
+                                send(Resource.Success(it))
+                            }
+                    } catch (throwable: Throwable) {
+                        send(Resource.Error(throwable))
+                    }
+                }
             }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val bookDetail: Flow<Book>
-        get() = fetchBookDetailTrigger
+    override val bookDetail: Flow<Resource<Book>> =
+        fetchBookDetailTrigger
             .flatMapLatest {
-                repository.fetchBookDetail(it)
+                channelFlow {
+                    send(Resource.InProgress)
+                    try {
+                        repository.fetchBookDetail(it)
+                            .collect {
+                                send(Resource.Success(it))
+                            }
+                    } catch (throwable: Throwable) {
+                        send(Resource.Error(throwable))
+                    }
+                }
             }
 
     override suspend fun fetchBookList() {
