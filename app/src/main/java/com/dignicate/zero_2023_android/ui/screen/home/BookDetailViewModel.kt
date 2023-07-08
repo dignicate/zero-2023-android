@@ -22,13 +22,13 @@ class BookDetailViewModel @Inject constructor(
 
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    fun onCreate() {
+    init {
         viewModelScope.launch {
             setupCoroutine()
         }
     }
 
-    fun onResume(id: Book.Id) {
+    fun onCreate(id: Book.Id) {
         viewModelScope.launch {
             useCase.fetchBookDetail(id)
         }
