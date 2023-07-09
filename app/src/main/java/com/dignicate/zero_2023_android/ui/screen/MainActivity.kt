@@ -35,16 +35,29 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    BookNavHost(
-                        modifier = Modifier,
-                        navController = navController,
+                    val scenario = Scenario.CASE1
+                    when (scenario) {
+                        Scenario.CASE1 -> {
+                            // BookNavHost から始まり、その先にある子画面遷移として DifferentNavHost につながる
+                            BookNavHost(
+                                modifier = Modifier,
+                                navController = navController,
+                            )
+                        }
+                        Scenario.CASE2 -> {
+                            // 子の画面遷移を単独の定義として Top として表示する
+                            DifferentNavHost(
+                                modifier = Modifier,
+                                navController = navController,
                     )
-//                    DifferentNavHost(
-//                        modifier = Modifier,
-//                        navController = navController,
-//                    )
+                        }
+                    }
                 }
             }
         }
     }
+}
+
+enum class Scenario {
+    CASE1, CASE2
 }

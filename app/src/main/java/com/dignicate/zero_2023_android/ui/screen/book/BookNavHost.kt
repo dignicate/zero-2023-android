@@ -12,11 +12,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.dignicate.zero_2023_android.domain.Book
 import com.dignicate.zero_2023_android.ui.ComposeScreen
-import com.dignicate.zero_2023_android.ui.screen.different.DifferentNavHost
 import com.dignicate.zero_2023_android.ui.screen.different.DifferentScreen
 import com.dignicate.zero_2023_android.ui.screen.different.loadDifferentNavHost
 import timber.log.Timber
@@ -28,12 +26,8 @@ fun BookNavHost(
     viewModel: BookNavHostViewModel = hiltViewModel(),
 ) {
     val destination by viewModel.navigator.destination.collectAsState()
-    val navController = rememberNavController()
     LaunchedEffect(destination) {
         Timber.d("current: ${navController.currentDestination?.route}, path: ${destination.router.path}")
-//        if (navController.currentDestination?.route != destination.router.path) {
-//            navController.navigate(destination.dynamicPath)
-//        }
         destination.transitionIfNeeded(navController)
     }
     Box(
