@@ -1,4 +1,4 @@
-package com.dignicate.zero_2023_android.ui.screen.home
+package com.dignicate.zero_2023_android.ui.screen.book
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

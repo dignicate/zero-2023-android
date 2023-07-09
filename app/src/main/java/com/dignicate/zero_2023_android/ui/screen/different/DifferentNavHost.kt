@@ -13,30 +13,28 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
-import androidx.navigation.compose.rememberNavController
 import com.dignicate.zero_2023_android.ui.ComposeScreen
-import com.dignicate.zero_2023_android.ui.screen.different.DifferentScreen.Top.ROUTER
 import timber.log.Timber
 
 @Composable
 fun DifferentNavHost(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController(),
+    navController: NavHostController,
     viewModel: DifferentNavHostViewModel = hiltViewModel(),
 ) {
     val destination by viewModel.navigator.destination.collectAsState()
     LaunchedEffect(destination) {
         Timber.d("current: ${navController.currentDestination?.route}, path: ${destination.router.path}")
-        if (navController.currentDestination?.route != destination.router.path) {
-            navController.navigate(destination.dynamicPath)
-        }
+        destination.transitionIfNeeded(navController)
     }
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center,
     ) {
-        NavHost(navController, startDestination = DifferentScreen.Top.ROUTER.absolutePath) {
+        NavHost(
+            navController,
+            startDestination = DifferentScreen.Top.ROUTER.absolutePath,
+        ) {
             loadDifferentNavHost(navController = navController)
         }
     }
@@ -47,62 +45,60 @@ object DifferentScreen {
         val ROUTER = router
     }
 
-    object Detail : ComposeScreen(Router("different/detail")) {
+    object Result : ComposeScreen(Router("different/result")) {
         val ROUTER = router
     }
 
-    val route = "different"
+    object Suggest : ComposeScreen(Router("different/suggest")) {
+        val ROUTER = router
+    }
 }
 
 fun NavGraphBuilder.loadDifferentNavHost(
     navController: NavHostController,
 ) {
-    navigation(
-        startDestination = ROUTER.absolutePath,
-        route = DifferentScreen.route,
+    composable(
+        route = DifferentScreen.Top.ROUTER.absolutePath,
     ) {
-        composable(
-            route = ROUTER.absolutePath,
-        ) {
-            DifferentTopView(
-                modifier = Modifier,
-                onBackClicked = {
-                    navController.popBackStack()
-                },
-                onMenuClicked = {
-
-                },
-            )
-//            Column(
-//            ) {
-//                Text(
-//                    text = "Different Top",
-//                )
-//                Button(
-//                    onClick = {
-//                        navController.navigate(DifferentScreen.Detail.dynamicPath)
-//                    },
-//                ) {
-//                    Text(
-//                        text = "Go To Different."
-//                    )
-//                }
-//            }
-        }
-        composable(
-            route = DifferentScreen.Detail.ROUTER.absolutePath,
-        ) {
-            Text(
-                text = "Different Detail",
-            )
-        }
-        composable(
-            route = ComposeScreen.Unknown.router.absolutePath,
-        ) {
-            Text(
-                text = "Empty",
-                modifier = Modifier,
-            )
-        }
+        DifferentTopView(
+            modifier = Modifier,
+            onBackClick = {
+                navController.popBackStack()
+            },
+            onPositiveClick = {
+                navController.navigate(DifferentScreen.Result.dynamicPath)
+            },
+            onNegativeClick = {
+                navController.navigate(DifferentScreen.Suggest.dynamicPath)
+            },
+        )
+    }
+    composable(
+        route = DifferentScreen.Result.ROUTER.absolutePath,
+    ) {
+        DifferentResultView(
+            modifier = Modifier,
+            onBackClick = {
+                navController.popBackStack()
+            },
+        )
+    }
+    composable(
+        route = DifferentScreen.Suggest.ROUTER.absolutePath,
+    ) {
+        DifferentSuggestView(
+            modifier = Modifier,
+            onBackClick = {
+                navController.popBackStack()
+            },
+        )
+    }
+    composable(
+        route = ComposeScreen.Unknown.router.absolutePath,
+    ) {
+        Text(
+            text = "Empty",
+            modifier = Modifier,
+        )
     }
 }

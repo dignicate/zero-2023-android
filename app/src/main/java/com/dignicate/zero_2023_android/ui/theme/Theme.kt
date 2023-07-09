@@ -78,6 +78,7 @@ fun Zero2023androidTheme(
 object ColorSchemeExtension {
     val ColorScheme.textMain by mutableStateOf(Color(0xFF11184B), structuralEqualityPolicy())
     val ColorScheme.textWhite by mutableStateOf(Color(0xFFFFFFFF), structuralEqualityPolicy())
+    val ColorScheme.textResult by mutableStateOf(Color(0xFF00AA00), structuralEqualityPolicy())
     val ColorScheme.bookCell by mutableStateOf(Color(0xFFFFFFFF), structuralEqualityPolicy())
     val ColorScheme.bgGray by mutableStateOf(Color(0x70000000), structuralEqualityPolicy())
     val ColorScheme.bgButton by mutableStateOf(Color(0xFFDD0000), structuralEqualityPolicy())
