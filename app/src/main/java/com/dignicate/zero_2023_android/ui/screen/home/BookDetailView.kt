@@ -83,9 +83,9 @@ private fun BookDetailView(
         topBar = {
             BookDetailTopAppBar(
                 modifier = modifier,
-                onBackClicked = { onBackClicked.invoke() }
+                onBackClicked = { onBackClicked.invoke() },
             )
-        }
+        },
     ) {
         Box(
             modifier = modifier

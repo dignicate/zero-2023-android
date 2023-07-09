@@ -1,4 +1,4 @@
-package com.dignicate.zero_2023_android.ui.screen.home
+package com.dignicate.zero_2023_android.ui.screen.different
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
