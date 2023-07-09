@@ -22,9 +22,7 @@ class BookDetailViewModel @Inject constructor(
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            setupCoroutine()
-        }
+        setupBinding()
     }
 
     fun onCreate(id: Book.Id) {
@@ -33,26 +31,29 @@ class BookDetailViewModel @Inject constructor(
         }
     }
 
-    private suspend fun setupCoroutine() {
-        useCase.bookDetail
-            .collect { resource ->
-                when (resource) {
-                    is Resource.Success -> {
-                        _uiState.value =
-                            _uiState.value.success(
-                                book = resource.value.toViewData(),
-                            )
-                    }
-                    is Resource.InProgress -> {
-                        _uiState.value = _uiState.value.inProgress()
-                    }
-                    is Resource.Error -> {
-                        _uiState.value = _uiState.value.error(resource.throwable)
+    private fun setupBinding() {
+        viewModelScope.launch {
+            useCase.bookDetail
+                .collect { resource ->
+                    when (resource) {
+                        is Resource.Success -> {
+                            _uiState.value =
+                                _uiState.value.success(
+                                    book = resource.value.toViewData(),
+                                )
+                        }
+
+                        is Resource.InProgress -> {
+                            _uiState.value = _uiState.value.inProgress()
+                        }
+
+                        is Resource.Error -> {
+                            _uiState.value = _uiState.value.error(resource.throwable)
+                        }
                     }
                 }
-            }
+        }
     }
-
 
     data class UiState(
         val book: Book?,

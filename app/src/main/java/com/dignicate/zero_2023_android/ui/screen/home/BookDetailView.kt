@@ -189,7 +189,7 @@ private fun BookDetailItemView(
             .clickable {
                 onClick.invoke()
             },
-        elevation = CardDefaults.cardElevation(2.dp)
+        elevation = CardDefaults.cardElevation(1.dp)
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
