@@ -17,15 +17,16 @@ import com.dignicate.zero_2023_android.ui.theme.Zero2023androidTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DifferentTopAppBar(
+fun DifferentCommonAppBar(
     modifier: Modifier = Modifier,
-    onBackClicked: () -> Unit,
+    title: String,
+    onBackClick: () -> Unit,
 ) {
     TopAppBar(
         modifier = modifier,
         title = {
             Text(
-                text = "別の Nav Host",
+                text = title,
                 modifier = Modifier
                     .fillMaxWidth(),
                 textAlign = TextAlign.Center,
@@ -34,7 +35,7 @@ fun DifferentTopAppBar(
         },
         navigationIcon = {
             IconButton(
-                onClick = { onBackClicked.invoke() },
+                onClick = { onBackClick.invoke() },
             ) {
                 Icon(
                     painterResource(id = R.drawable.material_arrow_back_40),
@@ -52,9 +53,10 @@ fun DifferentTopAppBar(
 @Composable
 fun DifferentTopAppBar_Preview() {
     Zero2023androidTheme {
-        DifferentTopAppBar(
+        DifferentCommonAppBar(
             modifier = Modifier,
-            onBackClicked = {},
+            title = "プレビュー",
+            onBackClick = {},
         )
     }
 }

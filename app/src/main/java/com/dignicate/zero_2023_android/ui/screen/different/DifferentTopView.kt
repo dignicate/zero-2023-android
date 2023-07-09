@@ -73,9 +73,10 @@ private fun DifferentTopView(
 ) {
     Scaffold(
         topBar = {
-            DifferentTopAppBar(
+            DifferentCommonAppBar(
                 modifier = modifier,
-                onBackClicked = onBackClick,
+                title = "NavHost 別定義 Top",
+                onBackClick = onBackClick,
             )
         }
     ) {
