@@ -75,7 +75,7 @@ fun NavGraphBuilder.loadDifferentNavHost(
                     navController.popBackStack()
                 },
                 onPositiveClick = {
-
+                    navController.navigate(DifferentScreen.Result.dynamicPath)
                 },
                 onNegativeClick = {
                     navController.navigate(DifferentScreen.Suggest.dynamicPath)
@@ -85,8 +85,11 @@ fun NavGraphBuilder.loadDifferentNavHost(
         composable(
             route = DifferentScreen.Result.ROUTER.absolutePath,
         ) {
-            Text(
-                text = "Different Detail",
+            DifferentResultView(
+                modifier = Modifier,
+                onBackClick = {
+                    navController.popBackStack()
+                },
             )
         }
         composable(
