@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,9 +22,7 @@ class BookDetailViewModel @Inject constructor(
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            setupCoroutine()
-        }
+        setupBinding()
     }
 
     fun onCreate(id: Book.Id) {
@@ -34,32 +31,58 @@ class BookDetailViewModel @Inject constructor(
         }
     }
 
-    private suspend fun setupCoroutine() {
-        useCase.bookDetail
-            .collect { resource ->
-                when (resource) {
-                    is Resource.Success -> {
-                        _uiState.value =
-                            _uiState.value.copy(
-                                book = resource.value.toViewData(),
-                                showsLoadingIndicator = false,
-                            )
-                    }
-                    is Resource.InProgress -> {
-                        _uiState.value = _uiState.value.copy(showsLoadingIndicator = true)
-                    }
-                    is Resource.Error -> {
-                        Timber.e(resource.throwable)
+    private fun setupBinding() {
+        viewModelScope.launch {
+            useCase.bookDetail
+                .collect { resource ->
+                    when (resource) {
+                        is Resource.Success -> {
+                            _uiState.value =
+                                _uiState.value.success(
+                                    book = resource.value.toViewData(),
+                                )
+                        }
+
+                        is Resource.InProgress -> {
+                            _uiState.value = _uiState.value.inProgress()
+                        }
+
+                        is Resource.Error -> {
+                            _uiState.value = _uiState.value.error(resource.throwable)
+                        }
                     }
                 }
-            }
+        }
     }
-
 
     data class UiState(
         val book: Book?,
         val showsLoadingIndicator: Boolean,
+        val errorMessage: String?,
     ) {
+
+        fun success(book: Book): UiState {
+            return copy(
+                book = book,
+                showsLoadingIndicator = false,
+                errorMessage = null,
+            )
+        }
+
+        fun inProgress(): UiState {
+            return copy(
+                showsLoadingIndicator = true,
+                errorMessage = null,
+            )
+        }
+
+        fun error(throwable: Throwable): UiState {
+            return copy(
+                showsLoadingIndicator = false,
+                errorMessage = throwable.message,
+            )
+        }
+
         data class Book(
             val title: String,
             val author: String,
@@ -72,6 +95,7 @@ class BookDetailViewModel @Inject constructor(
                 return UiState(
                     book = null,
                     showsLoadingIndicator = false,
+                    errorMessage = null,
                 )
             }
         }

@@ -13,6 +13,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -21,6 +23,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
@@ -61,6 +64,7 @@ fun BookDetailView(
         modifier = modifier,
         book = uiState.book,
         showsLoadingIndicator = uiState.showsLoadingIndicator,
+        errorMessage = uiState.errorMessage,
         onBackClicked = onBackClicked,
         onItemClicked = onItemClicked,
     )
@@ -71,6 +75,7 @@ private fun BookDetailView(
     modifier: Modifier,
     book: BookDetailViewModel.UiState.Book?,
     showsLoadingIndicator: Boolean,
+    errorMessage: String?,
     onBackClicked: () -> Unit,
     onItemClicked: () -> Unit,
 ) {
@@ -78,9 +83,9 @@ private fun BookDetailView(
         topBar = {
             BookDetailTopAppBar(
                 modifier = modifier,
-                onBackClicked = { onBackClicked.invoke() }
+                onBackClicked = { onBackClicked.invoke() },
             )
-        }
+        },
     ) {
         Box(
             modifier = modifier
@@ -93,37 +98,43 @@ private fun BookDetailView(
             Column(
                 modifier = Modifier,
             ) {
-                Column(
+                Card(
                     modifier = modifier
                         .padding(horizontal = 12.dp, vertical = 12.dp)
-                        .background(
-                            color = MaterialTheme.colorScheme.bookCell,
-                            shape = RoundedCornerShape(6.dp),
-                        )
                         .fillMaxWidth()
                         .height(140.dp),
+                    elevation = CardDefaults.cardElevation(2.dp),
                 ) {
-                    Text(
-                        modifier = modifier
-                            .height(68.dp)
-                            .padding(top = 12.dp, start = 12.dp),
-                        text = book?.title ?: "",
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.textMain,
-                        maxLines = 2,
-                    )
-                    Text(
-                        modifier = modifier.padding(start = 12.dp),
-                        text = book?.author ?: "",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.textMain,
-                    )
-                    Text(
-                        modifier = modifier.padding(start = 12.dp),
-                        text = book?.publishedAt ?: "",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.textMain,
-                    )
+                    Column(
+                        modifier = Modifier
+                            .background(
+                                color = MaterialTheme.colorScheme.bookCell,
+                                shape = RoundedCornerShape(6.dp),
+                            )
+                            .fillMaxSize()
+                    ) {
+                        Text(
+                            modifier = modifier
+                                .height(68.dp)
+                                .padding(top = 12.dp, start = 12.dp),
+                            text = book?.title ?: "",
+                            style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.textMain,
+                            maxLines = 2,
+                        )
+                        Text(
+                            modifier = modifier.padding(start = 12.dp),
+                            text = book?.author ?: "",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.textMain,
+                        )
+                        Text(
+                            modifier = modifier.padding(start = 12.dp),
+                            text = book?.publishedAt ?: "",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.textMain,
+                        )
+                    }
                 }
                 Text(
                     modifier = modifier.padding(start = 12.dp),
@@ -148,6 +159,18 @@ private fun BookDetailView(
             if (showsLoadingIndicator) {
                 IndicatorView()
             }
+            if (errorMessage != null) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = errorMessage,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
+            }
         }
     }
 }
@@ -158,25 +181,31 @@ private fun BookDetailItemView(
     item: String,
     onClick: () -> Unit,
 ) {
-    Column(
-        verticalArrangement = Arrangement.Center,
+    Card(
         modifier = modifier
             .padding(horizontal = 12.dp, vertical = 2.dp)
             .fillMaxWidth()
-            .height(40.dp)
+            .height(60.dp)
             .clickable {
                 onClick.invoke()
-            }
-            .background(
-                color = MaterialTheme.colorScheme.bookCell,
-                shape = RoundedCornerShape(6.dp),
-            ),
+            },
+        elevation = CardDefaults.cardElevation(1.dp)
     ) {
-        Text(
-            text = item,
-            modifier = modifier
-                .padding(horizontal = 12.dp)
-        )
+        Column(
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    color = MaterialTheme.colorScheme.bookCell,
+                    shape = RoundedCornerShape(6.dp),
+                ),
+        ) {
+            Text(
+                text = item,
+                modifier = Modifier
+                    .padding(horizontal = 12.dp)
+            )
+        }
     }
 }
 
@@ -198,6 +227,7 @@ private fun BookDetailView_Preview() {
                 )
             ),
             showsLoadingIndicator = false,
+            errorMessage = null,
             onBackClicked = {},
             onItemClicked = {},
         )

@@ -30,8 +30,9 @@ class BookUseCaseImpl @Inject constructor(
                     send(Resource.InProgress)
                     try {
                         repository.fetchBookList()
-                            .collect {
-                                send(Resource.Success(it))
+                            .collect { result ->
+                                val data = result.getOrThrow()
+                                send(Resource.Success(data))
                             }
                     } catch (throwable: Throwable) {
                         send(Resource.Error(throwable))
@@ -47,8 +48,9 @@ class BookUseCaseImpl @Inject constructor(
                     send(Resource.InProgress)
                     try {
                         repository.fetchBookDetail(it)
-                            .collect {
-                                send(Resource.Success(it))
+                            .collect { result ->
+                                val data = result.getOrThrow()
+                                send(Resource.Success(data))
                             }
                     } catch (throwable: Throwable) {
                         send(Resource.Error(throwable))

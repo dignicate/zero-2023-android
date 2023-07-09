@@ -40,7 +40,7 @@ import timber.log.Timber
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainNavHostViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +69,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun MainScreenNavHost(
     modifier: Modifier,
-    viewModel: MainViewModel,
+    viewModel: MainNavHostViewModel,
 ) {
     val destination by viewModel.navigator.destination.collectAsState()
     val navController = rememberNavController()

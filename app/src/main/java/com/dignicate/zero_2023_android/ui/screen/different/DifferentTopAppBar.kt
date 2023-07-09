@@ -1,4 +1,4 @@
-package com.dignicate.zero_2023_android.ui.screen.home
+package com.dignicate.zero_2023_android.ui.screen.different
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,7 +17,7 @@ import com.dignicate.zero_2023_android.ui.theme.Zero2023androidTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookDetailTopAppBar(
+fun DifferentTopAppBar(
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit,
 ) {
@@ -25,7 +25,7 @@ fun BookDetailTopAppBar(
         modifier = modifier,
         title = {
             Text(
-                text = "Book Detail",
+                text = "別の Nav Host",
                 modifier = Modifier
                     .fillMaxWidth(),
                 textAlign = TextAlign.Center,
@@ -50,9 +50,9 @@ fun BookDetailTopAppBar(
 
 @Preview
 @Composable
-fun BookDetailTopAppBar_Preview() {
+fun DifferentTopAppBar_Preview() {
     Zero2023androidTheme {
-        BookDetailTopAppBar(
+        DifferentTopAppBar(
             modifier = Modifier,
             onBackClicked = {},
         )

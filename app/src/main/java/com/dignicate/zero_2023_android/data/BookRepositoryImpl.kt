@@ -21,22 +21,19 @@ class BookRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
 ) : BookRepository {
 
-    override fun fetchBookList(): Flow<BookList> {
+    override fun fetchBookList(): Flow<Result<BookList>> {
         return callbackFlow {
             val api = apiService.getBookList()
             api.enqueue(object: Callback<BookListDto> {
                 override fun onResponse(call: Call<BookListDto>, response: Response<BookListDto>) {
-                    response.body()?.let {
-                        val domain = it.toDomain()
-                        trySendBlocking(domain)
-                            .onFailure { e -> Timber.e(e) }
+                    response.body()?.toDomain()?.let { domain ->
+                        trySend(Result.success(domain))
                     } ?: run {
-                        val code = response.code()
-                        Timber.e("Unexpected response data. code: $code")
+                        trySend(Result.failure(RuntimeException()))
                     }
                 }
                 override fun onFailure(call: Call<BookListDto>, t: Throwable) {
-                    Timber.e(t)
+                    trySend(Result.failure(t))
                 }
             })
             awaitClose {
@@ -45,22 +42,21 @@ class BookRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun fetchBookDetail(id: Book.Id): Flow<Book> {
+    override fun fetchBookDetail(id: Book.Id): Flow<Result<Book>> {
         return callbackFlow {
             val api = apiService.getBookDetail(id.value)
             api.enqueue(object: Callback<BookDetailDto> {
                 override fun onResponse(call: Call<BookDetailDto>, response: Response<BookDetailDto>) {
-                    response.body()?.let {
-                        val domain = it.toDomain()
-                        trySendBlocking(domain)
-                            .onFailure { e -> Timber.e(e) }
+                    response.body()?.toDomain()?.let { domain ->
+                        trySend(Result.success(domain))
                     } ?: run {
                         val code = response.code()
                         Timber.e("Unexpected response data. code: $code")
+                        trySend(Result.failure(RuntimeException("パースに失敗しました")))
                     }
                 }
                 override fun onFailure(call: Call<BookDetailDto>, t: Throwable) {
-                    Timber.e(t)
+                    trySend(Result.failure(t))
                 }
             })
             awaitClose {

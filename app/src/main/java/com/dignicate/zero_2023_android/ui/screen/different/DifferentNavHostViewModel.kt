@@ -6,11 +6,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class DifferentViewModel @Inject constructor(
+class DifferentNavHostViewModel @Inject constructor(
     val navigator: ComposeNavigator,
 ) : ViewModel() {
 
-    fun onResume() {
-        navigator.navigate(DifferentScreen.Top)
+    fun onCreate() {
+
     }
 }

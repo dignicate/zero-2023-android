@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -14,6 +15,9 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -122,44 +126,49 @@ private fun BookListItemView(
     item: BookListViewModel.UiState.BookSummary,
     onClick: (BookListViewModel.UiState.BookSummary.Id) -> Unit,
 ) {
-    Box(
-        modifier
+    Card(
+        modifier = modifier
             .width(159.dp)
             .height(209.dp)
-            .background(
-                color = MaterialTheme.colorScheme.bookCell,
-                shape = RoundedCornerShape(6.dp)
-            )
+            .padding(1.dp)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
             ) {
                 onClick.invoke(item.id)
-            }
-    ,
+            },
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
-        Column(
-            modifier = modifier
-                .padding(horizontal = 24.dp, vertical = 24.dp)
-            ,
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    color = MaterialTheme.colorScheme.bookCell,
+                    shape = RoundedCornerShape(6.dp)
+                ),
         ) {
-            Text(
-                text = item.title,
-                color = MaterialTheme.colorScheme.textMain,
-                style=  MaterialTheme.typography.bodyTitle,
+            Column(
                 modifier = modifier
-                    .height(36.dp),
-                maxLines = 2,
-            )
-            Spacer(modifier = modifier.height(8.dp))
-            Text(
-                text = item.author,
-                color = MaterialTheme.colorScheme.textMain,
-                style = MaterialTheme.typography.labelSmall,
-                modifier = modifier
-                    .height(28.dp),
-                maxLines = 2,
-            )
+                    .padding(horizontal = 24.dp, vertical = 24.dp),
+            ) {
+                Text(
+                    text = item.title,
+                    color = MaterialTheme.colorScheme.textMain,
+                    style = MaterialTheme.typography.bodyTitle,
+                    modifier = modifier
+                        .height(36.dp),
+                    maxLines = 2,
+                )
+                Spacer(modifier = modifier.height(8.dp))
+                Text(
+                    text = item.author,
+                    color = MaterialTheme.colorScheme.textMain,
+                    style = MaterialTheme.typography.labelSmall,
+                    modifier = modifier
+                        .height(28.dp),
+                    maxLines = 2,
+                )
+            }
         }
     }
 }
