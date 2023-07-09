@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    val scenario = Scenario.CASE1
+                    val scenario = Scenario.CASE1 // ← ここで切り替える
                     when (scenario) {
                         Scenario.CASE1 -> {
                             // BookNavHost から始まり、その先にある子画面遷移として DifferentNavHost につながる

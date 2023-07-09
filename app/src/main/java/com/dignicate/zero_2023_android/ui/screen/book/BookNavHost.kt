@@ -75,15 +75,6 @@ fun BookNavHost(
 
             // 別定義の NavHost を読み込む
             loadDifferentNavHost(navController = navController)
-
-//            composable(
-//                route = DifferentScreen.Top.router.absolutePath,
-//            ) {
-//                DifferentNavHost(
-//                    modifier = modifier,
-//                    navController = navController,
-//                )
-//            }
         }
     }
 }
