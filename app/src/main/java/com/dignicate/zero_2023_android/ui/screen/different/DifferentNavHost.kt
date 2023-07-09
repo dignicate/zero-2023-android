@@ -21,7 +21,7 @@ import timber.log.Timber
 @Composable
 fun DifferentNavHost(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController(),
+    navController: NavHostController,
     viewModel: DifferentNavHostViewModel = hiltViewModel(),
 ) {
     val destination by viewModel.navigator.destination.collectAsState()
@@ -40,51 +40,7 @@ fun DifferentNavHost(
             navController,
             startDestination = DifferentScreen.Top.ROUTER.absolutePath,
         ) {
-//            loadDifferentNavHost(navController = navController)
-            composable(
-                route = DifferentScreen.Top.ROUTER.absolutePath,
-            ) {
-                DifferentTopView(
-                    modifier = Modifier,
-                    onBackClick = {
-                        navController.popBackStack()
-                    },
-                    onPositiveClick = {
-                        navController.navigate(DifferentScreen.Result.dynamicPath)
-                    },
-                    onNegativeClick = {
-                        navController.navigate(DifferentScreen.Suggest.dynamicPath)
-                    },
-                )
-            }
-            composable(
-                route = DifferentScreen.Result.ROUTER.absolutePath,
-            ) {
-                DifferentResultView(
-                    modifier = Modifier,
-                    onBackClick = {
-                        navController.popBackStack()
-                    },
-                )
-            }
-            composable(
-                route = DifferentScreen.Suggest.ROUTER.absolutePath,
-            ) {
-                DifferentSuggestView(
-                    modifier = Modifier,
-                    onBackClick = {
-                        navController.popBackStack()
-                    },
-                )
-            }
-            composable(
-                route = ComposeScreen.Unknown.router.absolutePath,
-            ) {
-                Text(
-                    text = "Empty",
-                    modifier = Modifier,
-                )
-            }
+            loadDifferentNavHost(navController = navController)
         }
     }
 }
@@ -108,10 +64,10 @@ object DifferentScreen {
 fun NavGraphBuilder.loadDifferentNavHost(
     navController: NavHostController,
 ) {
-    navigation(
-        startDestination = DifferentScreen.Top.ROUTER.absolutePath,
-        route = DifferentScreen.route,
-    ) {
+//    navigation(
+//        startDestination = DifferentScreen.Top.ROUTER.absolutePath,
+//        route = DifferentScreen.route,
+//    ) {
         composable(
             route = DifferentScreen.Top.ROUTER.absolutePath,
         ) {
@@ -156,5 +112,5 @@ fun NavGraphBuilder.loadDifferentNavHost(
                 modifier = Modifier,
             )
         }
-    }
+//    }
 }

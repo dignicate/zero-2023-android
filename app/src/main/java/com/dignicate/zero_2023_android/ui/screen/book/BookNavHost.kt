@@ -8,6 +8,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.dignicate.zero_2023_android.domain.Book
 import com.dignicate.zero_2023_android.ui.ComposeScreen
+import com.dignicate.zero_2023_android.ui.screen.different.DifferentNavHost
 import com.dignicate.zero_2023_android.ui.screen.different.DifferentScreen
 import com.dignicate.zero_2023_android.ui.screen.different.loadDifferentNavHost
 import timber.log.Timber
@@ -22,6 +24,7 @@ import timber.log.Timber
 @Composable
 fun BookNavHost(
     modifier: Modifier,
+    navController: NavHostController,
     viewModel: BookNavHostViewModel = hiltViewModel(),
 ) {
     val destination by viewModel.navigator.destination.collectAsState()
@@ -78,6 +81,15 @@ fun BookNavHost(
 
             // 別定義の NavHost を読み込む
             loadDifferentNavHost(navController = navController)
+
+//            composable(
+//                route = DifferentScreen.Top.router.absolutePath,
+//            ) {
+//                DifferentNavHost(
+//                    modifier = modifier,
+//                    navController = navController,
+//                )
+//            }
         }
     }
 }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import com.dignicate.zero_2023_android.ui.screen.book.BookNavHost
 import com.dignicate.zero_2023_android.ui.screen.book.BookNavHostViewModel
 import com.dignicate.zero_2023_android.ui.screen.different.DifferentNavHost
@@ -24,8 +25,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: BookNavHostViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -35,12 +34,15 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    BookNavHost(
-//                        modifier = Modifier,
-//                    )
-                    DifferentNavHost(
+                    val navController = rememberNavController()
+                    BookNavHost(
                         modifier = Modifier,
+                        navController = navController,
                     )
+//                    DifferentNavHost(
+//                        modifier = Modifier,
+//                        navController = navController,
+//                    )
                 }
             }
         }
