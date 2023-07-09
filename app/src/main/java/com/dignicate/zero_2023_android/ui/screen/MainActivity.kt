@@ -3,14 +3,12 @@ package com.dignicate.zero_2023_android.ui.screen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.dignicate.zero_2023_android.ui.screen.book.BookNavHost
-import com.dignicate.zero_2023_android.ui.screen.book.BookNavHostViewModel
 import com.dignicate.zero_2023_android.ui.screen.different.DifferentNavHost
 import com.dignicate.zero_2023_android.ui.theme.Zero2023androidTheme
 import dagger.hilt.android.AndroidEntryPoint
