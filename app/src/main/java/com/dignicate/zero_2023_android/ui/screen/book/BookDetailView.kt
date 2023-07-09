@@ -1,4 +1,4 @@
-package com.dignicate.zero_2023_android.ui.screen.home
+package com.dignicate.zero_2023_android.ui.screen.book
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

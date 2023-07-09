@@ -1,6 +1,6 @@
 package com.dignicate.zero_2023_android.ui
 
-import com.dignicate.zero_2023_android.domain.Book
+import androidx.navigation.NavController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,6 +13,14 @@ interface NavigationDestination {
     val router: ComposeScreen.Router
     val dynamicPath: String
         get() = router.absolutePath
+
+    fun transitionIfNeeded(navController: NavController) {
+        val isNotCurrent = navController.currentDestination?.route != router.path
+        val isNotUnknown = this != ComposeScreen.Unknown
+        if (isNotCurrent && isNotUnknown) {
+            navController.navigate(dynamicPath)
+        }
+    }
 }
 
 abstract class ComposeScreen(override val router: Router) : NavigationDestination {
@@ -39,6 +47,7 @@ abstract class ComposeScreen(override val router: Router) : NavigationDestinatio
             }
             return stringBuilder.toString()
         }
+
     }
 }
 
